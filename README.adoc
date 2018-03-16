@@ -1,10 +1,10 @@
 = Spring Boot Demo of Resilience4j
 
-This demo shows how to use the fault tolerance library https://github.com/resilience4j/resilience4j[Resilience4j] in a Spring Boot application.
+This demo shows how to use the fault tolerance library https://github.com/resilience4j/resilience4j[Resilience4j] in a Spring Boot 2 application.
 
 == Gradle
 
-Add the Spring Boot Starter of Resilience4j to your compile dependency:
+Add the Spring Boot 2 Starter of Resilience4j to your compile dependency:
 
 ```
 repositories {
