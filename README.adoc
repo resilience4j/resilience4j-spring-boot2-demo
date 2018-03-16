@@ -14,15 +14,13 @@ repositories {
 
 
 ext{
-	resilience4jVersion = '0.11.0'
+	resilience4jVersion = '0.13.0-SNAPSHOT'
 }
 
 dependencies {
-	compile("io.github.resilience4j:resilience4j-spring-boot:${resilience4jVersion}")
-	compile("io.github.resilience4j:resilience4j-metrics:${resilience4jVersion}") // Optional
-	compile("io.github.resilience4j:resilience4j-prometheus:${resilience4jVersion}") // Optional
-	compile('io.prometheus:simpleclient_spring_boot:0.0.21') // Optional
-	compile("io.vavr:vavr-jackson:0.9.1")
+	compile('org.springframework.boot:spring-boot-starter-webflux')
+	compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
+	compile("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
 }
 ```
 
@@ -65,14 +63,13 @@ public class BusinessBService implements BusinessService  {
 
 == RxJava
 
-You can even apply a CircuitBreaker to any RxJava `Flowable` or `Observable`.
+You can even apply a CircuitBreaker to any Reactor `Flux` or `Mono`.
 
 [source,java]
 ----
-public Observable<String> methodWhichReturnsAStream() {
+public Flux<String> methodWhichReturnsAStream() {
     return backendBConnector.methodWhichReturnsAnObservable()
-            .timeout(1, TimeUnit.SECONDS)
-            .lift(CircuitBreakerOperator.of(circuitBreaker));
+            .transform(CircuitBreakerOperator.of(circuitBreaker));
 }
 ----
 
@@ -126,32 +123,6 @@ For example:
 }
 ----
 
-When you want to publish CircuitBreaker endpoints on the Prometheus endpoint, you have to add the optional module `resilience4j-prometheus`.
-For example:
-
-[source]
-----
-# HELP resilience4j_circuitbreaker_calls Circuit Breaker Call Stats
-# TYPE resilience4j_circuitbreaker_calls gauge
-resilience4j_circuitbreaker_calls{name="backendB",call_result="successful",} 0.0
-resilience4j_circuitbreaker_calls{name="backendB",call_result="failed",} 0.0
-resilience4j_circuitbreaker_calls{name="backendB",call_result="not_permitted",} 0.0
-resilience4j_circuitbreaker_calls{name="backendB",call_result="buffered",} 0.0
-resilience4j_circuitbreaker_calls{name="backendB",call_result="buffered_max",} 10.0
-resilience4j_circuitbreaker_calls{name="backendA",call_result="successful",} 0.0
-resilience4j_circuitbreaker_calls{name="backendA",call_result="failed",} 0.0
-resilience4j_circuitbreaker_calls{name="backendA",call_result="not_permitted",} 0.0
-resilience4j_circuitbreaker_calls{name="backendA",call_result="buffered",} 0.0
-resilience4j_circuitbreaker_calls{name="backendA",call_result="buffered_max",} 5.0
-# HELP resilience4j_circuitbreaker_states Circuit Breaker States
-# TYPE resilience4j_circuitbreaker_states gauge
-resilience4j_circuitbreaker_states{name="backendB",state="closed",} 1.0
-resilience4j_circuitbreaker_states{name="backendB",state="open",} 0.0
-resilience4j_circuitbreaker_states{name="backendB",state="half_open",} 0.0
-resilience4j_circuitbreaker_states{name="backendA",state="closed",} 1.0
-resilience4j_circuitbreaker_states{name="backendA",state="open",} 0.0
-resilience4j_circuitbreaker_states{name="backendA",state="half_open",} 0.0
-----
 
 == Configuration
 
@@ -297,7 +268,7 @@ For example `/management/circuitbreaker/events/backendA/ERROR`:
 
 == License
 
-Copyright 2017 Robert Winkler
+Copyright 2018 Robert Winkler
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
