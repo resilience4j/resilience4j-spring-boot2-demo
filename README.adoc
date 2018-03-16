@@ -61,7 +61,7 @@ public class BusinessBService implements BusinessService  {
 }
 ----
 
-== RxJava
+== Spring Reactor
 
 You can even apply a CircuitBreaker to any Reactor `Flux` or `Mono`.
 
