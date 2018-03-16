@@ -1,0 +1,39 @@
+spring:
+    application.name: resilience4j-demo
+    jackson.serialization.indent_output: true
+
+server:
+    port: 9080
+
+management:
+    contextPath: /management
+    add-application-context-header: false
+    health:
+        db.enabled: false
+        diskspace.enabled: false
+    security.enabled: false
+
+endpoints:
+    health.mapping.DOWN: OK
+    health.mapping.OUT_OF_SERVICE : OK
+
+info:
+    name: ${spring.application.name}
+    description: resilience4j demo
+    environment: ${spring.profiles.active}
+    version: 0.0.1
+
+resilience4j.circuitbreaker:
+    backends:
+        backendA:
+            ringBufferSizeInClosedState: 5
+            ringBufferSizeInHalfOpenState: 3
+            waitInterval: 5000
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10
+        backendB:
+            ringBufferSizeInClosedState: 10
+            ringBufferSizeInHalfOpenState: 5
+            waitInterval: 5000
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10

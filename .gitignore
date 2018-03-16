@@ -1,0 +1,17 @@
+target
+.classpath
+.project
+.settings
+.idea
+*.iml
+.gradle
+build
+native/
+caches/
+.sonar
+angular2-ui/node
+node_modules
+dist
+npm-debug.log
+classes
+out
