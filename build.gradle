@@ -15,15 +15,9 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
-jar {
-	baseName = 'resilience4j-spring-boot-demo'
-	version = '0.12.1'
-}
-
 sourceCompatibility = 1.8
 
 repositories {
-	mavenLocal()
 	jcenter()
 	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
@@ -35,7 +29,6 @@ ext{
 	resilience4jVersion = '0.13.0-SNAPSHOT'
 }
 
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
@@ -44,9 +37,4 @@ dependencies {
 	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
-	runtime("org.springframework.boot:spring-boot-properties-migrator")
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '4.6'
 }
