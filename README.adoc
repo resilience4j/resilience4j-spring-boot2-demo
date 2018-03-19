@@ -104,25 +104,26 @@ For example:
 }
 ----
 
-When you want to publish CircuitBreaker metrics on the Metrics endpoint, you can add `resilience4j-metrics` to register metrics in a Dropwizard Metrics Registry.
+Metrics are automatically published on the Metrics endpoint.
 For example:
 
 [source,json]
 ----
 {
-    "resilience4j.circuitbreaker.backendA.successful": 2,
-    "resilience4j.circuitbreaker.backendA.failed": 3,
-    "resilience4j.circuitbreaker.backendA.buffered": 5,
-    "resilience4j.circuitbreaker.backendA.buffered_max": 5,
-    "resilience4j.circuitbreaker.backendA.not_permitted": 7,
-    "resilience4j.circuitbreaker.backendB.successful": 0,
-    "resilience4j.circuitbreaker.backendB.failed": 0,
-    "resilience4j.circuitbreaker.backendB.buffered": 0,
-    "resilience4j.circuitbreaker.backendB.buffered_max": 10,
-    "resilience4j.circuitbreaker.backendB.not_permitted": 0
+    "names": [
+        "resilience4j.circuitbreaker.backendA.successful",
+        "resilience4j.circuitbreaker.backendA.failed",
+        "resilience4j.circuitbreaker.backendA.buffered",
+        "resilience4j.circuitbreaker.backendA.buffered_max",
+        "resilience4j.circuitbreaker.backendA.not_permitted",
+        "resilience4j.circuitbreaker.backendB.successful",
+        "resilience4j.circuitbreaker.backendB.failed",
+        "resilience4j.circuitbreaker.backendB.buffered",
+        "resilience4j.circuitbreaker.backendB.buffered_max",
+        "resilience4j.circuitbreaker.backendB.not_permitted"
+        ]
 }
 ----
-
 
 == Configuration
 
@@ -150,7 +151,7 @@ resilience4j.circuitbreaker:
 
 The emitted CircuitBreaker events are stored in a separate circular event consumer buffers. The size of a event consumer buffer can be configured per CircuitBreaker in the application.yml file (eventConsumerBufferSize).
 The demo adds a custom Spring Boot Actuator endpoint which can be used to monitor the emitted events of your CircuitBreakers.
-The endpoint `/management/circuitbreaker` lists the names of all CircuitBreaker instances.
+The endpoint `/actuator/circuitbreakers` lists the names of all CircuitBreaker instances.
 For example:
 
 ----
@@ -162,8 +163,7 @@ For example:
 }
 ----
 
-The endpoint `/management/circuitbreaker/events` lists the latest 100 emitted events of all CircuitBreaker instances.
-The endpoint `/management/circuitbreaker/stream/events` streams emitted events of all CircuitBreaker instances using Server-Sent Events.
+The endpoint `/actuator/circuitbreaker-events` lists the latest 100 emitted events of all CircuitBreaker instances.
 
 ----
 {
@@ -198,9 +198,8 @@ The endpoint `/management/circuitbreaker/stream/events` streams emitted events o
 }
 ----
 
-The endpoint `/management/circuitbreaker/events/{circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
-The endpoint `/management/circuitbreaker/stream/events/{circuitBreakerName}` streams emitted events using Server-Sent Events.
-For example `/management/circuitbreaker/events/backendA`:
+The endpoint `/actuator/circuitbreake-events?name={circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
+For example `/actuator/circuitbreaker/events?name=backendA`:
 
 ----
 {
@@ -228,39 +227,6 @@ For example `/management/circuitbreaker/events/backendA`:
     "circuitBreakerName": "backendA",
     "type": "NOT_PERMITTED",
     "creationTime": "2017-01-10T15:39:22.780+01:00[Europe/Berlin]"
-  }
-]
-}
-----
-
-You can even filter the list of  events.
-The endpoint `/management/circuitbreaker/events/{circuitBreakerName}/{eventType}` lists the filtered events.
-The endpoint `/management/circuitbreaker/stream/events/{circuitBreakerName}/{eventType}` streams emitted events using Server-Sent Events.
-Event types can be:
-
-* ERROR: A CircuitBreakerEvent which informs that an error has been recorded.
-* IGNORED_ERROR: A CircuitBreakerEvent which informs that an error has been ignored.
-* SUCCESS: A CircuitBreakerEvent which informs that a success has been recorded.
-* NOT_PERMITTED: A CircuitBreakerEvent which informs that a call was not permitted because the CircuitBreaker state is OPEN.
-* STATE_TRANSITION: A CircuitBreakerEvent which informs the state of the CircuitBreaker has been changed.
-
-For example `/management/circuitbreaker/events/backendA/ERROR`:
-----
-{
-"circuitBreakerEvents":[
-  {
-    "circuitBreakerName": "backendA",
-    "type": "ERROR",
-    "creationTime": "2017-01-10T15:42:59.324+01:00[Europe/Berlin]",
-    "errorMessage": "org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception",
-    "durationInMs": 0
-  },
-  {
-    "circuitBreakerName": "backendA",
-    "type": "ERROR",
-    "creationTime": "2017-01-10T15:43:22.802+01:00[Europe/Berlin]",
-    "errorMessage": "org.springframework.web.client.HttpServerErrorException: 500 This is a remote exception",
-    "durationInMs": 0
   }
 ]
 }

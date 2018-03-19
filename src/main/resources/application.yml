@@ -5,15 +5,11 @@ spring:
 server:
     port: 9080
 
-management:
-    contextPath: /management
-    add-application-context-header: false
-    health:
-        db.enabled: false
-        diskspace.enabled: false
-    security.enabled: false
+management.security.enabled: false
+management.endpoints.web.exposure.include: '*'
+management.endpoint.health.show-details: always
 
-endpoints:
+management.endpoints:
     health.mapping.DOWN: OK
     health.mapping.OUT_OF_SERVICE : OK
 
@@ -26,12 +22,14 @@ info:
 resilience4j.circuitbreaker:
     backends:
         backendA:
+            registerHealthIndicator: true
             ringBufferSizeInClosedState: 5
             ringBufferSizeInHalfOpenState: 3
             waitInterval: 5000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
         backendB:
+            registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 5
             waitInterval: 5000
