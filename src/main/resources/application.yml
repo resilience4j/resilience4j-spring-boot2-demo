@@ -28,6 +28,8 @@ resilience4j.circuitbreaker:
             waitInterval: 5000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
+            ignoreExceptions:
+                - io.github.robwin.exception.BusinessException
         backendB:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
@@ -35,3 +37,4 @@ resilience4j.circuitbreaker:
             waitInterval: 5000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
+            recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
