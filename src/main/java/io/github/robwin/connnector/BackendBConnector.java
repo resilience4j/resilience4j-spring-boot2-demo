@@ -3,6 +3,7 @@ package io.github.robwin.connnector;
 
 import java.io.IOException;
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
@@ -10,6 +11,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import io.github.robwin.exception.BusinessException;
 import reactor.core.publisher.Flux;
 
+@Bulkhead(name = "backendB")
 @Component(value = "backendBConnector")
 public class BackendBConnector implements Connector {
 

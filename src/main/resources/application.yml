@@ -38,3 +38,22 @@ resilience4j.circuitbreaker:
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
+resilience4j.retry:
+    backends:
+        retryBackendA:
+            maxRetryAttempts: 3
+            waitDuration: 100
+            retryExceptions:
+                - java.io.IOException
+        retryBackendB:
+            maxRetryAttempts: 3
+            waitDuration: 100
+            retryExceptions:
+                - java.io.IOException
+resilience4j.bulkhead:
+    backends:
+        backendA:
+            maxConcurrentCall: 1
+        backendB:
+            maxWaitTime: 10
+            maxConcurrentCall: 2

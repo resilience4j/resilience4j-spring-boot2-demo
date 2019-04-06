@@ -1,6 +1,7 @@
 package io.github.robwin.connnector;
 
 
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
@@ -12,7 +13,8 @@ import reactor.core.publisher.Flux;
 /**
  * This Connector shows how to use the CircuitBreaker annotation.
  */
-@CircuitBreaker(backend = "backendA")
+@CircuitBreaker(name = "backendA")
+@Retry(name = "backendA")
 @Component(value = "backendAConnector")
 public class BackendAConnector implements Connector {
 
