@@ -40,14 +40,14 @@ resilience4j.circuitbreaker:
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
 resilience4j.retry:
     backends:
-        retryBackendA:
+        backendA:
             maxRetryAttempts: 3
             waitDuration: 100
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
-        retryBackendB:
+        backendB:
             maxRetryAttempts: 3
             waitDuration: 100
             retryExceptions:

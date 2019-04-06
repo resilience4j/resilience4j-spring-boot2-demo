@@ -195,7 +195,7 @@ The endpoint `/actuator/circuitbreakerevents` lists the latest 100 emitted event
 }
 ----
 
-The endpoint `/actuator/circuitbreakeevents/{circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
+The endpoint `/actuator/circuitbreakerevents/{circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
 For example `/actuator/circuitbreakerevents/backendA`:
 
 ----
