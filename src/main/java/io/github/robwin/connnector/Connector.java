@@ -9,5 +9,5 @@ public interface Connector {
 
     String ignoreException();
 
-    Flux<String> methodWhichReturnsAStream();
+    Flux<String> fluxFailure();
 }

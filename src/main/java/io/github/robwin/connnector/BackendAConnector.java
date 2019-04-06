@@ -10,6 +10,8 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.robwin.exception.BusinessException;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
+
 /**
  * This Connector shows how to use the CircuitBreaker annotation.
  */
@@ -34,7 +36,7 @@ public class BackendAConnector implements Connector {
     }
 
     @Override
-    public Flux<String> methodWhichReturnsAStream() {
-        return Flux.never();
+    public Flux<String> fluxFailure() {
+        return Flux.error(new IOException("BAM!"));
     }
 }

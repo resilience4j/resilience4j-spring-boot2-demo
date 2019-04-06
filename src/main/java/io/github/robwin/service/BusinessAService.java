@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import io.github.robwin.connnector.Connector;
 import io.vavr.control.Try;
+import reactor.core.publisher.Flux;
 
 @Service(value = "businessAService")
 public class BusinessAService implements BusinessService {
@@ -28,6 +29,11 @@ public class BusinessAService implements BusinessService {
     @Override
     public String ignore() {
         return backendAConnector.ignoreException();
+    }
+
+    @Override
+    public Flux<String> fluxFailure() {
+        return backendAConnector.fluxFailure();
     }
 
     @Override

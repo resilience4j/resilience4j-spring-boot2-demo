@@ -33,7 +33,7 @@ public class BackendBConnector implements Connector {
     }
 
     @Override
-    public Flux<String> methodWhichReturnsAStream() {
+    public Flux<String> fluxFailure() {
         return Flux.error(new IOException("BAM!"));
     }
 }

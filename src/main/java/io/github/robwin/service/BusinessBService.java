@@ -43,11 +43,12 @@ public class BusinessBService implements BusinessService  {
     public Try<String> methodWithRecovery() {
         Supplier<String> backendFunction = CircuitBreaker.decorateSupplier(circuitBreaker, () -> backendBConnector.failure());
         return Try.ofSupplier(backendFunction)
-                .recover((throwable) -> recovery(throwable));
+                .recover(this::recovery);
     }
 
-    public Flux<String> methodWhichReturnsAStream() {
-        return backendBConnector.methodWhichReturnsAStream()
+    @Override
+    public Flux<String> fluxFailure() {
+        return backendBConnector.fluxFailure()
                 .transform(CircuitBreakerOperator.of(circuitBreaker));
     }
 

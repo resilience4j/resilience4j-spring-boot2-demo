@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.robwin.service.BusinessService;
+import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping(value = "/backendA")
@@ -30,6 +31,11 @@ public class BackendAController {
     @GetMapping("ignore")
     public String ignore(){
         return businessAService.ignore();
+    }
+
+    @GetMapping("fluxFailure")
+    public Flux<String> fluxFailure(){
+        return businessAService.fluxFailure();
     }
 
     @GetMapping("recover")
