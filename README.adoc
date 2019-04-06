@@ -14,24 +14,27 @@ repositories {
 
 
 ext{
-	resilience4jVersion = '0.13.0-SNAPSHOT'
+	resilience4jVersion = '0.14.1'
 }
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
 	compile("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
+	compile("io.micrometer:micrometer-registry-prometheus")
 }
 ```
 
 == Spring AOP
 
-The demo shows how to use the `CircuitBreaker` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
+The demo shows how to use the `@CircuitBreaker`, `@Retry` and `@Bulkhead` annotation to make your Spring Boot application more fault tolerant. You can either annotate a class in order to protect all public methods or just some specific methods.
 For example:
 
 [source,java]
 ----
 @CircuitBreaker(backend = "backendA")
+@Retry(backend = "backendA")
+@Bulkhead(backend = "backendA")
 @Component(value = "backendAConnector")
 public class BackendAConnector implements Connector {
     ...
@@ -104,25 +107,19 @@ For example:
 }
 ----
 
-Metrics are automatically published on the Metrics endpoint.
+Metrics are automatically published on the Prometheus endpoint.
 For example:
 
 [source,json]
 ----
-{
-    "names": [
-        "resilience4j.circuitbreaker.backendA.successful",
-        "resilience4j.circuitbreaker.backendA.failed",
-        "resilience4j.circuitbreaker.backendA.buffered",
-        "resilience4j.circuitbreaker.backendA.buffered_max",
-        "resilience4j.circuitbreaker.backendA.not_permitted",
-        "resilience4j.circuitbreaker.backendB.successful",
-        "resilience4j.circuitbreaker.backendB.failed",
-        "resilience4j.circuitbreaker.backendB.buffered",
-        "resilience4j.circuitbreaker.backendB.buffered_max",
-        "resilience4j.circuitbreaker.backendB.not_permitted"
-        ]
-}
+# HELP resilience4j_circuitbreaker_calls
+# TYPE resilience4j_circuitbreaker_calls gauge
+resilience4j_circuitbreaker_calls{kind="not_permitted",name="backendA",} 0.0
+resilience4j_circuitbreaker_calls{kind="not_permitted",name="backendB",} 0.0
+resilience4j_circuitbreaker_calls{kind="successful",name="backendA",} 0.0
+resilience4j_circuitbreaker_calls{kind="successful",name="backendB",} 0.0
+resilience4j_circuitbreaker_calls{kind="failed",name="backendB",} 0.0
+resilience4j_circuitbreaker_calls{kind="failed",name="backendA",} 0.0
 ----
 
 == Configuration
@@ -163,7 +160,7 @@ For example:
 }
 ----
 
-The endpoint `/actuator/circuitbreaker-events` lists the latest 100 emitted events of all CircuitBreaker instances.
+The endpoint `/actuator/circuitbreakerevents` lists the latest 100 emitted events of all CircuitBreaker instances.
 
 ----
 {
@@ -198,8 +195,8 @@ The endpoint `/actuator/circuitbreaker-events` lists the latest 100 emitted even
 }
 ----
 
-The endpoint `/actuator/circuitbreake-events?name={circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
-For example `/actuator/circuitbreaker/events?name=backendA`:
+The endpoint `/actuator/circuitbreakeevents/{circuitBreakerName}` lists the latest emitted events of a specific CircuitBreaker.
+For example `/actuator/circuitbreakerevents/backendA`:
 
 ----
 {
@@ -234,7 +231,7 @@ For example `/actuator/circuitbreaker/events?name=backendA`:
 
 == License
 
-Copyright 2018 Robert Winkler
+Copyright 2019 Robert Winkler
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

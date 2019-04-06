@@ -44,12 +44,16 @@ resilience4j.retry:
             maxRetryAttempts: 3
             waitDuration: 100
             retryExceptions:
-                - java.io.IOException
+                - org.springframework.web.client.HttpServerErrorException
+            ignoreExceptions:
+                - io.github.robwin.exception.BusinessException
         retryBackendB:
             maxRetryAttempts: 3
             waitDuration: 100
             retryExceptions:
-                - java.io.IOException
+                - org.springframework.web.client.HttpServerErrorException
+            ignoreExceptions:
+                - io.github.robwin.exception.BusinessException
 resilience4j.bulkhead:
     backends:
         backendA:

@@ -32,6 +32,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-webflux')
 	compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
 	compile("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
+	compile("io.micrometer:micrometer-registry-prometheus")
 	compile("io.vavr:vavr-jackson:0.10.0")
 	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
