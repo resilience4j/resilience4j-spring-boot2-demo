@@ -5,6 +5,7 @@ spring:
 server:
     port: 9080
 
+
 management.security.enabled: false
 management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
@@ -19,17 +20,29 @@ info:
     environment: ${spring.profiles.active}
     version: 0.0.1
 
+#resilience4j.circuitbreaker.metrics.use_legacy_binder: true
+
 resilience4j.circuitbreaker:
-    backends:
-        backendA:
+    configs:
+        default:
             registerHealthIndicator: true
-            ringBufferSizeInClosedState: 5
+            ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
             waitInterval: 5000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
-            ignoreExceptions:
-                - io.github.robwin.exception.BusinessException
+        shared:
+            registerHealthIndicator: true
+            ringBufferSizeInClosedState: 100
+            ringBufferSizeInHalfOpenState: 30
+            waitInterval: 5000
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10
+
+    backends:
+        backendA:
+            baseConfig: default
+            ringBufferSizeInClosedState: 5
         backendB:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
