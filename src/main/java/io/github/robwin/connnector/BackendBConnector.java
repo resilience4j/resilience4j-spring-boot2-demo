@@ -1,16 +1,16 @@
 package io.github.robwin.connnector;
 
 
-import java.io.IOException;
-
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.retry.annotation.Retry;
+import io.github.robwin.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
-
-import io.github.robwin.exception.BusinessException;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 @Bulkhead(name = "backendB")
 @Retry(name = "backendB")
@@ -35,5 +35,20 @@ public class BackendBConnector implements Connector {
     @Override
     public Flux<String> fluxFailure() {
         return Flux.error(new IOException("BAM!"));
+    }
+
+    @Override
+    public Mono<String> monoSuccess() {
+        return Mono.just("Hello World from backend B");
+    }
+
+    @Override
+    public Mono<String> monoFailure() {
+        return Mono.error(new IOException("BAM!"));
+    }
+
+    @Override
+    public Flux<String> fluxSuccess() {
+        return Flux.just("Hello", "World");
     }
 }

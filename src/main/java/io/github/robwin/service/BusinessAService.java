@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import io.github.robwin.connnector.Connector;
 import io.vavr.control.Try;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service(value = "businessAService")
 public class BusinessAService implements BusinessService {
@@ -34,6 +35,21 @@ public class BusinessAService implements BusinessService {
     @Override
     public Flux<String> fluxFailure() {
         return backendAConnector.fluxFailure();
+    }
+
+    @Override
+    public Mono<String> monoSuccess() {
+        return backendAConnector.monoSuccess();
+    }
+
+    @Override
+    public Mono<String> monoFailure() {
+        return backendAConnector.monoFailure();
+    }
+
+    @Override
+    public Flux<String> fluxSuccess() {
+        return backendAConnector.fluxSuccess();
     }
 
     @Override

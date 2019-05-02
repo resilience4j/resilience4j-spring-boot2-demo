@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/backendC")
@@ -30,6 +31,21 @@ public class BackendCController {
     @GetMapping("ignore")
     public String ignore(){
         return businessCService.ignore();
+    }
+
+    @GetMapping("monoSuccess")
+    public Mono<String> monoSuccess(){
+        return businessCService.monoSuccess();
+    }
+
+    @GetMapping("monoFailure")
+    public Mono<String> monoFailure(){
+        return businessCService.monoFailure();
+    }
+
+    @GetMapping("fluxSuccess")
+    public Flux<String> fluxSuccess(){
+        return businessCService.fluxSuccess();
     }
 
     @GetMapping("fluxFailure")

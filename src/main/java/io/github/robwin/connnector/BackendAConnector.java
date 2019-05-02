@@ -9,6 +9,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.robwin.exception.BusinessException;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 
@@ -38,5 +39,20 @@ public class BackendAConnector implements Connector {
     @Override
     public Flux<String> fluxFailure() {
         return Flux.error(new IOException("BAM!"));
+    }
+
+    @Override
+    public Mono<String> monoSuccess() {
+        return Mono.just("Hello World");
+    }
+
+    @Override
+    public Mono<String> monoFailure() {
+        return Mono.error(new IOException("BAM!"));
+    }
+
+    @Override
+    public Flux<String> fluxSuccess() {
+        return Flux.just("Hello", "World");
     }
 }

@@ -1,6 +1,7 @@
 package io.github.robwin.connnector;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface Connector {
     String failure();
@@ -10,4 +11,10 @@ public interface Connector {
     String ignoreException();
 
     Flux<String> fluxFailure();
+
+    Mono<String> monoSuccess();
+
+    Mono<String> monoFailure();
+
+    Flux<String> fluxSuccess();
 }

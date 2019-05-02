@@ -1,12 +1,12 @@
 package io.github.robwin.controller;
 
+import io.github.robwin.service.BusinessService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.github.robwin.service.BusinessService;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping(value = "/backendA")
@@ -31,6 +31,21 @@ public class BackendAController {
     @GetMapping("ignore")
     public String ignore(){
         return businessAService.ignore();
+    }
+
+    @GetMapping("monoSuccess")
+    public Mono<String> monoSuccess(){
+        return businessAService.monoSuccess();
+    }
+
+    @GetMapping("monoFailure")
+    public Mono<String> monoFailure(){
+        return businessAService.monoFailure();
+    }
+
+    @GetMapping("fluxSuccess")
+    public Flux<String> fluxSuccess(){
+        return businessAService.fluxSuccess();
     }
 
     @GetMapping("fluxFailure")

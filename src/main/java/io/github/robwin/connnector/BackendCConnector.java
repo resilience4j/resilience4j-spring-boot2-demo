@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 
@@ -36,5 +37,20 @@ public class BackendCConnector implements Connector {
     @Override
     public Flux<String> fluxFailure() {
         return Flux.error(new IOException("BAM!"));
+    }
+
+    @Override
+    public Mono<String> monoSuccess() {
+        return Mono.just("Hello World from backend C");
+    }
+
+    @Override
+    public Mono<String> monoFailure() {
+        return Mono.error(new IOException("BAM!"));
+    }
+
+    @Override
+    public Flux<String> fluxSuccess() {
+        return Flux.just("Hello", "World");
     }
 }
