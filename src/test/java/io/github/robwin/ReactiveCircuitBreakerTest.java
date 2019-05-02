@@ -6,10 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.util.Map;
 
@@ -18,13 +17,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 		classes = Application.class)
-public class CircuitBreakerTest {
+public class ReactiveCircuitBreakerTest {
 
 	private static final String BACKEND_A = "backendA";
 	private static final String BACKEND_B = "backendB";
 
 	@Autowired
-	private TestRestTemplate restTemplate;
+	private WebTestClient webClient;
 
 	@Test
 	public void shouldOpenAndCloseBackendACircuitBreaker() throws InterruptedException {
@@ -59,21 +58,23 @@ public class CircuitBreakerTest {
 	}
 
 	private void checkHealthStatus(String circuitBreakerName, Status status) {
-		ResponseEntity<HealthResponse> healthResponse = restTemplate.getForEntity("/actuator/health", HealthResponse.class);
-		assertThat(healthResponse.getBody()).isNotNull();
-		assertThat(healthResponse.getBody().getDetails()).isNotNull();
-		Map<String, Object> backendACircuitBreakerDetails = healthResponse.getBody().getDetails().get(circuitBreakerName);
+		EntityExchangeResult<HealthResponse> healthResponse = webClient.get().uri("/actuator/health").exchange()
+			.expectBody(HealthResponse.class).returnResult();
+
+		assertThat(healthResponse.getResponseBody()).isNotNull();
+		assertThat(healthResponse.getResponseBody().getDetails()).isNotNull();
+		Map<String, Object> backendACircuitBreakerDetails = healthResponse.getResponseBody().getDetails().get(circuitBreakerName);
 		assertThat(backendACircuitBreakerDetails).isNotNull();
 		assertThat(backendACircuitBreakerDetails.get("status")).isEqualTo(status.toString());
 	}
 
 	private void produceFailure(String backend) {
-		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/failure", String.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+		webClient.get().uri("/" + backend + "/monoFailure").exchange().expectStatus()
+				.is5xxServerError();
 	}
 
 	private void produceSuccess(String backend) {
-		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/success", String.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		webClient.get().uri("/" + backend + "/monoSuccess").exchange().expectStatus()
+				.isOk();
 	}
 }

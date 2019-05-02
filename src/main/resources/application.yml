@@ -6,13 +6,9 @@ server:
     port: 9080
 
 
-management.security.enabled: false
+
 management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
-
-management.endpoints:
-    health.mapping.DOWN: OK
-    health.mapping.OUT_OF_SERVICE : OK
 
 info:
     name: ${spring.application.name}
@@ -31,6 +27,8 @@ resilience4j.circuitbreaker:
             waitInterval: 1000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
+            ignoreExceptions:
+                - io.github.robwin.exception.BusinessException
         shared:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 100
@@ -38,7 +36,8 @@ resilience4j.circuitbreaker:
             waitInterval: 2000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
-
+            ignoreExceptions:
+                - io.github.robwin.exception.BusinessException
     backends:
         backendA:
             baseConfig: default
@@ -58,6 +57,7 @@ resilience4j.retry:
             waitDuration: 100
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
         backendB:
@@ -65,6 +65,7 @@ resilience4j.retry:
             waitDuration: 100
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
 resilience4j.bulkhead:

@@ -1,0 +1,57 @@
+package io.github.robwin;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+		classes = Application.class)
+public class ReactiveRetryTest {
+
+	private static final String BACKEND_A = "backendA";
+
+	@Autowired
+	private TestRestTemplate restTemplate;
+
+	@Test
+	public void shouldRetryThreeTimes() {
+		// When
+		produceFailure(BACKEND_A);
+
+		checkMetrics("failed_with_retry", BACKEND_A, "1.0");
+	}
+
+	@Test
+	public void shouldSucceedWithoutRetry() {
+		produceSuccess(BACKEND_A);
+
+		checkMetrics("successful_without_retry", BACKEND_A, "1.0");
+	}
+
+	private void checkMetrics(String kind, String backend, String count) {
+		ResponseEntity<String> metricsResponse = restTemplate.getForEntity("/actuator/prometheus", String.class);
+		assertThat(metricsResponse.getBody()).isNotNull();
+		String response = metricsResponse.getBody();
+		assertThat(response).contains("resilience4j_retry_calls{kind=\"" + kind + "\",name=\"" +  backend + "\",} " + count);
+	}
+
+	private void produceFailure(String backend) {
+		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/monoFailure", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	private void produceSuccess(String backend) {
+		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/monoSuccess", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
+
+
+}
