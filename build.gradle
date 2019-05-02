@@ -39,7 +39,6 @@ dependencies {
 	compile("io.micrometer:micrometer-registry-prometheus")
 	
 	compile("io.vavr:vavr-jackson:0.10.0")
-	compile("net.logstash.logback:logstash-logback-encoder:4.7")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
 }

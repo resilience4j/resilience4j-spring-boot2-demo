@@ -19,12 +19,12 @@ public class BackendBController {
     }
 
     @GetMapping("failure")
-    public String backendBFailure(){
+    public String failure(){
         return businessBService.failure();
     }
 
     @GetMapping("success")
-    public String backendBSuccess(){
+    public String success(){
         return businessBService.success();
     }
 

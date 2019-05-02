@@ -28,14 +28,14 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
-            waitInterval: 5000
+            waitInterval: 1000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
         shared:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 100
             ringBufferSizeInHalfOpenState: 30
-            waitInterval: 5000
+            waitInterval: 2000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
 
@@ -46,8 +46,8 @@ resilience4j.circuitbreaker:
         backendB:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
-            ringBufferSizeInHalfOpenState: 5
-            waitInterval: 5000
+            ringBufferSizeInHalfOpenState: 3
+            waitInterval: 500
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate

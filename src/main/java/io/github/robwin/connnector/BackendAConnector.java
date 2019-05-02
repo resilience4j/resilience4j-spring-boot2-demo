@@ -1,13 +1,12 @@
 package io.github.robwin.connnector;
 
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import io.github.robwin.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
-
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.robwin.exception.BusinessException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,8 +15,8 @@ import java.io.IOException;
 /**
  * This Connector shows how to use the CircuitBreaker annotation.
  */
-@CircuitBreaker(name = "backendA")
 @Retry(name = "backendA")
+@CircuitBreaker(name = "backendA")
 @Component(value = "backendAConnector")
 public class BackendAConnector implements Connector {
 
