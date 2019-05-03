@@ -2,6 +2,7 @@ package io.github.robwin.connnector;
 
 
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.robwin.exception.BusinessException;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 @Bulkhead(name = "backendB")
 @Retry(name = "backendB")
+@RateLimiter(name = "backendB")
 @Component(value = "backendBConnector")
 public class BackendBConnector implements Connector {
 

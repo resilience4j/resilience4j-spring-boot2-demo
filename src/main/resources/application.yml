@@ -75,3 +75,15 @@ resilience4j.bulkhead:
         backendB:
             maxWaitTime: 10
             maxConcurrentCall: 2
+resilience4j.limiter:
+    backends:
+        backendA:
+            limitForPeriod: 10
+            limitRefreshPeriodInMillis: 1000
+            timeoutInMillis: 0
+            registerHealthIndicator: true
+            eventConsumerBufferSize: 100
+        backendB:
+            limitForPeriod: 6
+            limitRefreshPeriodInMillis: 500
+            timeoutInMillis: 3000

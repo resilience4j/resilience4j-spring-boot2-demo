@@ -2,6 +2,7 @@ package io.github.robwin.connnector;
 
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.robwin.exception.BusinessException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.io.IOException;
  */
 @Retry(name = "backendA")
 @CircuitBreaker(name = "backendA")
+@RateLimiter(name = "backendA")
 @Component(value = "backendAConnector")
 public class BackendAConnector implements Connector {
 
