@@ -17,4 +17,7 @@ public interface Connector {
     Mono<String> monoFailure();
 
     Flux<String> fluxSuccess();
+
+    String failureWithFallback();
+
 }

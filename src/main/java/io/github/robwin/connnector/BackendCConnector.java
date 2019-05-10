@@ -53,4 +53,14 @@ public class BackendCConnector implements Connector {
     public Flux<String> fluxSuccess() {
         return Flux.just("Hello", "World");
     }
+
+    @Override
+    @CircuitBreaker(name = "backendC", fallbackMethod = "fallback")
+    public String failureWithFallback() {
+        return failure();
+    }
+
+    private String fallback(Throwable ex) {
+        return "Recovered " + ex.getMessage();
+    }
 }

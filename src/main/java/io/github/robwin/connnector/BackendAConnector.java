@@ -1,6 +1,7 @@
 package io.github.robwin.connnector;
 
 
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -18,6 +19,7 @@ import java.io.IOException;
  */
 @Retry(name = "backendA")
 @CircuitBreaker(name = "backendA")
+@Bulkhead(name = "backendA")
 @RateLimiter(name = "backendA")
 @Component(value = "backendAConnector")
 public class BackendAConnector implements Connector {
@@ -55,5 +57,19 @@ public class BackendAConnector implements Connector {
     @Override
     public Flux<String> fluxSuccess() {
         return Flux.just("Hello", "World");
+    }
+
+    @Override
+    @CircuitBreaker(name = "backendA", fallbackMethod = "fallback")
+    public String failureWithFallback() {
+        return failure();
+    }
+
+    private String fallback(HttpServerErrorException ex) {
+        return "Recovered HttpServerErrorException: " + ex.getMessage();
+    }
+
+    private String fallback(Throwable ex) {
+        return "Recovered Throwable: " + ex.getMessage();
     }
 }

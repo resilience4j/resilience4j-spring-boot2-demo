@@ -2,7 +2,6 @@ package io.github.robwin.service;
 
 
 import io.github.robwin.connnector.Connector;
-import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -32,6 +31,7 @@ public class BusinessCService implements BusinessService  {
         return backendCConnector.ignoreException();
     }
 
+
     @Override
     public Flux<String> fluxFailure() {
         return backendCConnector.fluxFailure();
@@ -53,12 +53,7 @@ public class BusinessCService implements BusinessService  {
     }
 
     @Override
-    public Try<String> methodWithRecovery() {
-        return Try.of(backendCConnector::failure)
-                .recover((throwable) -> recovery());
-    }
-
-    private String recovery() {
-        return "Hello world from recovery";
+    public String failureWithFallback() {
+        return backendCConnector.failureWithFallback();
     }
 }

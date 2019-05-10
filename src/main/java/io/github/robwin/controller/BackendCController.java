@@ -52,4 +52,9 @@ public class BackendCController {
     public Flux<String> fluxFailure(){
         return businessCService.fluxFailure();
     }
+
+    @GetMapping("fallback")
+    public String failureWithFallback(){
+        return businessCService.failureWithFallback();
+    }
 }

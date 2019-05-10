@@ -18,8 +18,10 @@ apply plugin: 'io.spring.dependency-management'
 sourceCompatibility = 1.8
 
 repositories {
-	jcenter()
 	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+    mavenCentral()
+	//mavenLocal()
+
 }
 configurations.all {
 	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'

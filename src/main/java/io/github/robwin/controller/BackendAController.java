@@ -53,8 +53,8 @@ public class BackendAController {
         return businessAService.fluxFailure();
     }
 
-    @GetMapping("recover")
-    public String methodWithRecovery(){
-        return businessAService.methodWithRecovery().get();
+    @GetMapping("fallback")
+    public String failureWithFallback(){
+        return businessAService.failureWithFallback();
     }
 }

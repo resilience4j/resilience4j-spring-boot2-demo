@@ -16,6 +16,10 @@ info:
     environment: ${spring.profiles.active}
     version: 0.0.1
 
+management.metrics.tags.application: ${spring.application.name}
+management.metrics.distribution.percentiles-histogram.http.server.requests: true
+management.metrics.distribution.percentiles-histogram.resilience4j.circuitbreaker.calls: true
+
 #resilience4j.circuitbreaker.metrics.use_legacy_binder: true
 
 resilience4j.circuitbreaker:
@@ -24,7 +28,8 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
-            waitInterval: 1000
+            automaticTransitionFromOpenToHalfOpenEnabled: true
+            waitInterval: 10000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             ignoreExceptions:
@@ -46,7 +51,7 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
-            waitInterval: 500
+            waitInterval: 50000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
@@ -71,10 +76,10 @@ resilience4j.retry:
 resilience4j.bulkhead:
     backends:
         backendA:
-            maxConcurrentCall: 1
+            maxConcurrentCall: 10
         backendB:
             maxWaitTime: 10
-            maxConcurrentCall: 2
+            maxConcurrentCall: 20
 resilience4j.limiter:
     backends:
         backendA:

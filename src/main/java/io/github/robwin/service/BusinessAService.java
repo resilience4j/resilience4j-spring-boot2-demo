@@ -1,10 +1,8 @@
 package io.github.robwin.service;
 
+import io.github.robwin.connnector.Connector;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import io.github.robwin.connnector.Connector;
-import io.vavr.control.Try;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -53,12 +51,7 @@ public class BusinessAService implements BusinessService {
     }
 
     @Override
-    public Try<String> methodWithRecovery() {
-        return Try.of(backendAConnector::failure)
-                .recover((throwable) -> recovery());
-    }
-
-    private String recovery() {
-        return "Hello world from recovery";
+    public String failureWithFallback() {
+        return backendAConnector.failureWithFallback();
     }
 }
