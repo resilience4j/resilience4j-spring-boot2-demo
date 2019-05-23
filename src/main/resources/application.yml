@@ -29,7 +29,7 @@ resilience4j.circuitbreaker:
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
             automaticTransitionFromOpenToHalfOpenEnabled: true
-            waitInterval: 10000
+            waitDurationInOpenState: 10
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             ignoreExceptions:
@@ -38,7 +38,7 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 100
             ringBufferSizeInHalfOpenState: 30
-            waitInterval: 2000
+            setWaitDurationInOpenState: 2
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             ignoreExceptions:
@@ -51,7 +51,7 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
-            waitInterval: 50000
+            waitDurationInOpenState: 50
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
