@@ -29,7 +29,7 @@ resilience4j.circuitbreaker:
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
             automaticTransitionFromOpenToHalfOpenEnabled: true
-            waitInterval: 10000
+            waitDurationInOpenState: 2000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             ignoreExceptions:
@@ -38,7 +38,7 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 100
             ringBufferSizeInHalfOpenState: 30
-            waitInterval: 2000
+            waitDurationInOpenState: 1000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             ignoreExceptions:
@@ -51,29 +51,29 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
-            waitInterval: 50000
+            waitDurationInOpenState: 1000
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
 resilience4j.retry:
+    configs:
+        default:
+            maxRetryAttempts: 2
+            waitDuration: 100
+            retryExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
+            ignoreExceptions:
+                - io.github.robwin.exception.BusinessException
     backends:
         backendA:
             maxRetryAttempts: 3
-            waitDuration: 100
-            retryExceptions:
-                - org.springframework.web.client.HttpServerErrorException
-                - java.io.IOException
-            ignoreExceptions:
-                - io.github.robwin.exception.BusinessException
         backendB:
             maxRetryAttempts: 3
-            waitDuration: 100
-            retryExceptions:
-                - org.springframework.web.client.HttpServerErrorException
-                - java.io.IOException
-            ignoreExceptions:
-                - io.github.robwin.exception.BusinessException
 resilience4j.bulkhead:
+    configs:
+        default:
+            maxConcurrentCall: 100
     backends:
         backendA:
             maxConcurrentCall: 10
@@ -81,6 +81,9 @@ resilience4j.bulkhead:
             maxWaitTime: 10
             maxConcurrentCall: 20
 resilience4j.limiter:
+    configs:
+        default:
+            limitForPeriod: 10
     backends:
         backendA:
             limitForPeriod: 10

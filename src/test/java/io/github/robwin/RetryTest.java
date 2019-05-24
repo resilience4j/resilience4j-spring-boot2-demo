@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 		classes = Application.class)
+@DirtiesContext
 public class RetryTest {
 
 	private static final String BACKEND_A = "backendA";
@@ -40,7 +42,7 @@ public class RetryTest {
 		ResponseEntity<String> metricsResponse = restTemplate.getForEntity("/actuator/prometheus", String.class);
 		assertThat(metricsResponse.getBody()).isNotNull();
 		String response = metricsResponse.getBody();
-		assertThat(response).contains("resilience4j_retry_calls{kind=\"" + kind + "\",name=\"" +  backend + "\",} " + count);
+		assertThat(response).contains("resilience4j_retry_calls{application=\"resilience4j-demo\",kind=\"" + kind + "\",name=\"" +  backend + "\",} " + count);
 	}
 
 	private void produceFailure(String backend) {
