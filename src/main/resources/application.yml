@@ -80,11 +80,11 @@ resilience4j.bulkhead:
         backendB:
             maxWaitTime: 10
             maxConcurrentCall: 20
-resilience4j.limiter:
+resilience4j.ratelimiter:
     configs:
         default:
             limitForPeriod: 10
-    backends:
+    limiters:
         backendA:
             limitForPeriod: 10
             limitRefreshPeriodInMillis: 1000
