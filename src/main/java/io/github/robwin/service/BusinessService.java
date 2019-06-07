@@ -4,6 +4,8 @@ package io.github.robwin.service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface BusinessService {
     String failure();
 
@@ -20,4 +22,8 @@ public interface BusinessService {
     Mono<String> monoFailure();
 
     Flux<String> fluxSuccess();
+
+    CompletableFuture<String> futureSuccess();
+
+    CompletableFuture<String> futureFailure();
 }

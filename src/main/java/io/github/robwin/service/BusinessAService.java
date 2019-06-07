@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.CompletableFuture;
+
 @Service(value = "businessAService")
 public class BusinessAService implements BusinessService {
 
@@ -48,6 +50,16 @@ public class BusinessAService implements BusinessService {
     @Override
     public Flux<String> fluxSuccess() {
         return backendAConnector.fluxSuccess();
+    }
+
+    @Override
+    public CompletableFuture<String> futureSuccess() {
+        return backendAConnector.futureSuccess();
+    }
+
+    @Override
+    public CompletableFuture<String> futureFailure() {
+        return backendAConnector.futureFailure();
     }
 
     @Override

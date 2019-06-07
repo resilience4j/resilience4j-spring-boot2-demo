@@ -3,6 +3,8 @@ package io.github.robwin.connnector;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface Connector {
     String failure();
 
@@ -19,5 +21,9 @@ public interface Connector {
     Flux<String> fluxSuccess();
 
     String failureWithFallback();
+
+    CompletableFuture<String> futureSuccess();
+
+    CompletableFuture<String> futureFailure();
 
 }

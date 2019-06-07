@@ -43,7 +43,7 @@ resilience4j.circuitbreaker:
             eventConsumerBufferSize: 10
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
-    backends:
+    instances:
         backendA:
             baseConfig: default
             ringBufferSizeInClosedState: 5
@@ -65,7 +65,7 @@ resilience4j.retry:
                 - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
-    backends:
+    instances:
         backendA:
             maxRetryAttempts: 3
         backendB:
@@ -74,17 +74,34 @@ resilience4j.bulkhead:
     configs:
         default:
             maxConcurrentCall: 100
-    backends:
+    instances:
         backendA:
             maxConcurrentCall: 10
         backendB:
             maxWaitTime: 10
             maxConcurrentCall: 20
+
+resilience4j.thread-pool-bulkhead:
+    configs:
+        default:
+            threadPoolProperties:
+                maxThreadPoolSize: 4
+                coreThreadPoolSize: 2
+                queueCapacity: 2
+    backends:
+        backendA:
+            baseConfig: default
+        backendB:
+            threadPoolProperties:
+                maxThreadPoolSize: 1
+                coreThreadPoolSize: 1
+                queueCapacity: 1
+
 resilience4j.ratelimiter:
     configs:
         default:
             limitForPeriod: 10
-    limiters:
+    instances:
         backendA:
             limitForPeriod: 10
             limitRefreshPeriodInMillis: 1000

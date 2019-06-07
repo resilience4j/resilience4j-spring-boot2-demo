@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping(value = "/backendC")
 public class BackendCController {
@@ -51,6 +53,16 @@ public class BackendCController {
     @GetMapping("fluxFailure")
     public Flux<String> fluxFailure(){
         return businessCService.fluxFailure();
+    }
+
+    @GetMapping("futureFailure")
+    public CompletableFuture<String> futureFailure(){
+        return businessCService.futureFailure();
+    }
+
+    @GetMapping("futureSuccess")
+    public CompletableFuture<String> futureSuccess(){
+        return businessCService.futureSuccess();
     }
 
     @GetMapping("fallback")

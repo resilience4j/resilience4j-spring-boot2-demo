@@ -13,19 +13,23 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
-@Bulkhead(name = "backendB")
+import static io.github.resilience4j.bulkhead.annotation.Bulkhead.*;
+
 @Retry(name = "backendB")
 @RateLimiter(name = "backendB")
 @Component(value = "backendBConnector")
 public class BackendBConnector implements Connector {
 
     @Override
+    @Bulkhead(name = "backendB")
     public String failure() {
         throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
     }
 
     @Override
+    @Bulkhead(name = "backendB")
     public String success() {
         return "Hello World from backend B";
     }
@@ -36,23 +40,41 @@ public class BackendBConnector implements Connector {
     }
 
     @Override
+    @Bulkhead(name = "backendB")
     public Flux<String> fluxFailure() {
         return Flux.error(new IOException("BAM!"));
     }
 
     @Override
+    @Bulkhead(name = "backendB")
     public Mono<String> monoSuccess() {
         return Mono.just("Hello World from backend B");
     }
 
     @Override
+    @Bulkhead(name = "backendB")
     public Mono<String> monoFailure() {
         return Mono.error(new IOException("BAM!"));
     }
 
     @Override
+    @Bulkhead(name = "backendB")
     public Flux<String> fluxSuccess() {
         return Flux.just("Hello", "World");
+    }
+
+    @Override
+    @Bulkhead(name = "backendB", type = Type.THREADPOOL)
+    public CompletableFuture<String> futureSuccess() {
+        return CompletableFuture.completedFuture("Hello World from backend B");
+    }
+
+    @Override
+    @Bulkhead(name = "backendB", type = Type.THREADPOOL)
+    public CompletableFuture<String> futureFailure() {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        future.completeExceptionally(new IOException("BAM!"));
+        return future;
     }
 
     @Override
