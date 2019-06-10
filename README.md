@@ -5,7 +5,7 @@ This demo shows how to use the fault tolerance library https://github.com/resili
 See https://resilience4j.readme.io/docs/getting-started-3[User Guide] for more details
 
 ## Requirements
-- https://docs.docker.com/install/[Docker] and https://docs.docker.com/compose/install/[Docker Compose] installed.
+[Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
 
 ## Getting Started
 
