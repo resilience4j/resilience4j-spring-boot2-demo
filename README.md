@@ -1,39 +1,39 @@
-= Spring Boot 2 demo of Resilience4j
+# Spring Boot 2 demo of Resilience4j
 
 This demo shows how to use the fault tolerance library https://github.com/resilience4j/resilience4j[Resilience4j] in a Spring Boot 2 application.
 
 See https://resilience4j.readme.io/docs/getting-started-3[User Guide] for more details
 
-== Requirements
+## Requirements
 - https://docs.docker.com/install/[Docker] and https://docs.docker.com/compose/install/[Docker Compose] installed.
 
-== Getting Started
+## Getting Started
 
 1. Use docker-compose to start grafana and prometheus servers.
-* In the root folder:
+- In the root folder:
 ```sh
 docker-compose -f docker-compose.yml up
 ```
 2. Start the demo project through the main class.
 
 3. Check the prometheus:
-* Open http://localhost:9090
-* Access status -> Targets, both endpoints must be "UP"
+- Open http://localhost:9090
+- Access status -> Targets, both endpoints must be "UP"
 
 4. Configure the grafana:
-* Open http://localhost:3000
-* Configure integration with Prometheus
-    * Access configuration
-    * Add data source
-    * Select prometheus
-    * Use url "http://localhost:9090" and access with value "Browser"
+- Open http://localhost:3000
+- Configure integration with Prometheus
+    - Access configuration
+    - Add data source
+    - Select prometheus
+    - Use url "http://localhost:9090" and access with value "Browser"
 
-* Configure dashboard
-    * Access "home"
-    * Import dashboard
-    * Upload dashboard.json from /docker
+- Configure dashboard
+    - Access "home"
+    - Import dashboard
+    - Upload dashboard.json from /docker
 
-== License
+## License
 
 Copyright 2019 Robert Winkler
 
