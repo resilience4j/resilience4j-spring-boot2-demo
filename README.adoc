@@ -22,13 +22,13 @@ docker-compose -f docker-compose.yml up
 
 4. Configure the grafana:
 - Open http://localhost:3000
-- Configure integration with Prometheus
+###### Configure integration with Prometheus
     - Access configuration
     - Add data source
     - Select prometheus
     - Use url "http://localhost:9090" and access with value "Browser"
 
-- Configure dashboard
+###### Configure dashboard
     - Access "home"
     - Import dashboard
     - Upload dashboard.json from /docker
