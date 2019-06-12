@@ -1,8 +1,9 @@
 # Spring Boot 2 demo of Resilience4j
 
-This demo shows how to use the fault tolerance library https://github.com/resilience4j/resilience4j[Resilience4j] in a Spring Boot 2 application.
 
-See https://resilience4j.readme.io/docs/getting-started-3[User Guide] for more details
+This demo shows how to use the fault tolerance library [Resilience4j](https://github.com/resilience4j/resilience4j) in a Spring Boot 2 application.
+
+See [User Guide](https://resilience4j.readme.io/docs/getting-started-3) for more details.
 
 ## Requirements
 [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
