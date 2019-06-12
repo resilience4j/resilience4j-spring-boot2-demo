@@ -23,7 +23,6 @@ management.metrics.distribution.percentiles-histogram.resilience4j.circuitbreake
 #resilience4j.circuitbreaker.metrics.use_legacy_binder: true
 
 resilience4j.circuitbreaker:
-    circuitbreakerAspectOrder: 1
     configs:
         default:
             registerHealthIndicator: true
@@ -57,7 +56,6 @@ resilience4j.circuitbreaker:
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
 resilience4j.retry:
-    retryAspectOrder: 0
     configs:
         default:
             maxRetryAttempts: 2
@@ -73,7 +71,6 @@ resilience4j.retry:
         backendB:
             maxRetryAttempts: 3
 resilience4j.bulkhead:
-    bulkheadAspectOrder: 3
     configs:
         default:
             maxConcurrentCall: 100
@@ -91,7 +88,7 @@ resilience4j.thread-pool-bulkhead:
                 maxThreadPoolSize: 4
                 coreThreadPoolSize: 2
                 queueCapacity: 2
-    backends:
+    instances:
         backendA:
             baseConfig: default
         backendB:
@@ -101,7 +98,6 @@ resilience4j.thread-pool-bulkhead:
                 queueCapacity: 1
 
 resilience4j.ratelimiter:
-    ratelimiterAspectOrder: 2
     configs:
         default:
             limitForPeriod: 10
