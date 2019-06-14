@@ -100,14 +100,14 @@ resilience4j.thread-pool-bulkhead:
 resilience4j.ratelimiter:
     configs:
         default:
-            limitForPeriod: 10
-    instances:
-        backendA:
+            registerHealthIndicator: false
             limitForPeriod: 10
             limitRefreshPeriod: 1s
             timeoutDuration: 0
-            registerHealthIndicator: true
             eventConsumerBufferSize: 100
+    instances:
+        backendA:
+            baseConfig: default
         backendB:
             limitForPeriod: 6
             limitRefreshPeriod: 500ms
