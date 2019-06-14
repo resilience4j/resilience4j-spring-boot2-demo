@@ -29,7 +29,7 @@ resilience4j.circuitbreaker:
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
             automaticTransitionFromOpenToHalfOpenEnabled: true
-            waitDurationInOpenState: 2000
+            waitDurationInOpenState: 2s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             ignoreExceptions:
@@ -38,7 +38,7 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 100
             ringBufferSizeInHalfOpenState: 30
-            waitDurationInOpenState: 1000
+            waitDurationInOpenState: 1s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             ignoreExceptions:
@@ -51,7 +51,7 @@ resilience4j.circuitbreaker:
             registerHealthIndicator: true
             ringBufferSizeInClosedState: 10
             ringBufferSizeInHalfOpenState: 3
-            waitDurationInOpenState: 1000
+            waitDurationInOpenState: 1s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
@@ -78,7 +78,7 @@ resilience4j.bulkhead:
         backendA:
             maxConcurrentCall: 10
         backendB:
-            maxWaitTime: 10
+            maxWaitTimeDuration: 10ms
             maxConcurrentCall: 20
 
 resilience4j.thread-pool-bulkhead:
@@ -104,11 +104,11 @@ resilience4j.ratelimiter:
     instances:
         backendA:
             limitForPeriod: 10
-            limitRefreshPeriodInMillis: 1000
-            timeoutInMillis: 0
+            limitRefreshPeriod: 1s
+            timeoutDuration: 0
             registerHealthIndicator: true
             eventConsumerBufferSize: 100
         backendB:
             limitForPeriod: 6
-            limitRefreshPeriodInMillis: 500
-            timeoutInMillis: 3000
+            limitRefreshPeriod: 500ms
+            timeoutDuration: 3s
