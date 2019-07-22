@@ -1,6 +1,6 @@
 # Spring Boot 2 demo of Resilience4j
 
-https://travis-ci.org/resilience4j/resilience4j-spring-boot2-demo.svg?branch=master
+[![Build Status](https://travis-ci.org/resilience4j/resilience4j-spring-boot2-demo.svg?branch=master)](https://travis-ci.org/resilience4j/resilience4j-spring-boot2-demo)
 
 This demo shows how to use the fault tolerance library [Resilience4j](https://github.com/resilience4j/resilience4j) in a Spring Boot 2 application.
 
