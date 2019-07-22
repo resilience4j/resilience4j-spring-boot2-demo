@@ -18,9 +18,8 @@ apply plugin: 'io.spring.dependency-management'
 sourceCompatibility = 1.8
 
 repositories {
-	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+	//maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
     mavenCentral()
-	jcenter()
 	//mavenLocal()
 
 }
@@ -29,7 +28,7 @@ configurations.all {
 }
 
 ext{
-	resilience4jVersion = '0.16.0'
+	resilience4jVersion = '0.17.0'
 }
 
 dependencies {
