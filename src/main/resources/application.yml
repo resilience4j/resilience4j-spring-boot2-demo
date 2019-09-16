@@ -5,10 +5,10 @@ spring:
 server:
     port: 9080
 
-
-
 management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
+
+management.health.diskspace.enabled: false
 
 info:
     name: ${spring.application.name}
@@ -25,19 +25,23 @@ management.metrics.distribution.percentiles-histogram.resilience4j.circuitbreake
 resilience4j.circuitbreaker:
     configs:
         default:
-            registerHealthIndicator: true
-            ringBufferSizeInClosedState: 10
-            ringBufferSizeInHalfOpenState: 3
+            registerHealthIndicator: false
+            slidingWindowSize: 10
+            minimumNumberOfCalls: 5
+            permittedNumberOfCallsInHalfOpenState: 3
             automaticTransitionFromOpenToHalfOpenEnabled: true
             waitDurationInOpenState: 2s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
+            recordExceptions:
+                - org.springframework.web.client.HttpServerErrorException
+                - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
         shared:
             registerHealthIndicator: true
-            ringBufferSizeInClosedState: 100
-            ringBufferSizeInHalfOpenState: 30
+            slidingWindowSize: 100
+            permittedNumberOfCallsInHalfOpenState: 30
             waitDurationInOpenState: 1s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
@@ -46,11 +50,11 @@ resilience4j.circuitbreaker:
     instances:
         backendA:
             baseConfig: default
-            ringBufferSizeInClosedState: 5
         backendB:
             registerHealthIndicator: true
-            ringBufferSizeInClosedState: 10
-            ringBufferSizeInHalfOpenState: 3
+            slidingWindowSize: 10
+            minimumNumberOfCalls: 10
+            permittedNumberOfCallsInHalfOpenState: 3
             waitDurationInOpenState: 1s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10

@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext
 public class ReactiveRetryTest {
 
-	private static final String BACKEND_A = "backendA";
+	private static final String BACKEND_B = "backendB";
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -26,16 +26,16 @@ public class ReactiveRetryTest {
 	@Test
 	public void shouldRetryThreeTimes() {
 		// When
-		produceFailure(BACKEND_A);
+		produceFailure(BACKEND_B);
 
-		checkMetrics("failed_with_retry", BACKEND_A, "1.0");
+		checkMetrics("failed_with_retry", BACKEND_B, "1.0");
 	}
 
 	@Test
 	public void shouldSucceedWithoutRetry() {
-		produceSuccess(BACKEND_A);
+		produceSuccess(BACKEND_B);
 
-		checkMetrics("successful_without_retry", BACKEND_A, "1.0");
+		checkMetrics("successful_without_retry", BACKEND_B, "1.0");
 	}
 
 	private void checkMetrics(String kind, String backend, String count) {

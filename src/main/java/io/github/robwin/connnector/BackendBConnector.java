@@ -8,6 +8,7 @@ import io.github.robwin.exception.BusinessException;
 import io.vavr.control.Try;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,8 +18,8 @@ import java.util.concurrent.CompletableFuture;
 
 import static io.github.resilience4j.bulkhead.annotation.Bulkhead.*;
 
-@Retry(name = "backendB")
 @RateLimiter(name = "backendB")
+@Retry(name = "backendB")
 @Component(value = "backendBConnector")
 public class BackendBConnector implements Connector {
 
@@ -32,6 +33,11 @@ public class BackendBConnector implements Connector {
     @Bulkhead(name = "backendB")
     public String success() {
         return "Hello World from backend B";
+    }
+
+    @Override
+    public String successException() {
+        throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "This is a remote client exception");
     }
 
     @Override

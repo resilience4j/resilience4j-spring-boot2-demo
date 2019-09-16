@@ -33,6 +33,11 @@ public class BusinessBService implements BusinessService  {
     }
 
     @Override
+    public String successException() {
+        return CircuitBreaker.decorateSupplier(circuitBreaker, backendBConnector::successException).get();
+    }
+
+    @Override
     public String ignore() {
         return CircuitBreaker.decorateSupplier(circuitBreaker, backendBConnector::ignoreException).get();
     }

@@ -29,6 +29,11 @@ public class BusinessCService implements BusinessService  {
     }
 
     @Override
+    public String successException() {
+        return backendCConnector.successException();
+    }
+
+    @Override
     public String ignore() {
         return backendCConnector.ignoreException();
     }

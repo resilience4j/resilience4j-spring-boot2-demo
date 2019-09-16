@@ -30,6 +30,11 @@ public class BackendBController {
         return businessBService.success();
     }
 
+    @GetMapping("successException")
+    public String successException(){
+        return businessBService.successException();
+    }
+
     @GetMapping("ignore")
     public String ignore(){
         return businessBService.ignore();

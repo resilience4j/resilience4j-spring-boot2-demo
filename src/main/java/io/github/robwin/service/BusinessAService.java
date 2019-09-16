@@ -28,6 +28,11 @@ public class BusinessAService implements BusinessService {
     }
 
     @Override
+    public String successException() {
+        return backendAConnector.successException();
+    }
+
+    @Override
     public String ignore() {
         return backendAConnector.ignoreException();
     }

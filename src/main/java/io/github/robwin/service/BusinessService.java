@@ -11,6 +11,8 @@ public interface BusinessService {
 
     String success();
 
+    String successException();
+
     String ignore();
 
     String failureWithFallback();

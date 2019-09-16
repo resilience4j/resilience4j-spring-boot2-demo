@@ -10,6 +10,8 @@ public interface Connector {
 
     String success();
 
+    String successException();
+
     String ignoreException();
 
     Flux<String> fluxFailure();

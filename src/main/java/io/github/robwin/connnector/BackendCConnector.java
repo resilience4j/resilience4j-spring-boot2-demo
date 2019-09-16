@@ -7,6 +7,8 @@ import io.github.resilience4j.retry.annotation.Retry;
 import io.github.robwin.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,6 +33,11 @@ public class BackendCConnector implements Connector {
     @Bulkhead(name = "backendC")
     public String success() {
         return "Hello World from backend C";
+    }
+
+    @Override
+    public String successException() {
+        throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "This is a remote client exception");
     }
 
     @Override

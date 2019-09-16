@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DirtiesContext
 public class RetryTest {
 
-	private static final String BACKEND_A = "backendA";
+	private static final String BACKEND_A = "backendB";
 
 	@Autowired
 	private TestRestTemplate restTemplate;
