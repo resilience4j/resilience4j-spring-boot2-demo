@@ -63,6 +63,22 @@ public class CircuitBreakerTest {
 		checkHealthStatus(BACKEND_B, State.CLOSED);
 	}
 
+    @Test
+    public void shouldHalfOpenAndCloseBackendBCircuitBreaker() throws InterruptedException {
+        Stream.rangeClosed(1, 10).forEach((count) -> produceFailure(BACKEND_B));
+
+        Thread.sleep(2000);
+
+		produceSuccess(BACKEND_B);
+        checkHealthStatus(BACKEND_B, State.HALF_OPEN);
+
+        produceSuccess(BACKEND_B);
+        checkHealthStatus(BACKEND_B, State.HALF_OPEN);
+
+        produceSuccess(BACKEND_B);
+        checkHealthStatus(BACKEND_B, State.CLOSED);
+    }
+
 	private void checkHealthStatus(String circuitBreakerName, State state) {
 		CircuitBreaker circuitBreaker = registry.circuitBreaker(circuitBreakerName);
 		assertThat(circuitBreaker.getState()).isEqualTo(state);
