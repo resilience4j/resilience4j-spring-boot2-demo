@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.1.7.RELEASE'
+		springBootVersion = '2.1.8.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -21,7 +21,7 @@ repositories {
 	//mavenLocal()
 	//jcenter()
 	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
-    
+    mavenCentral()
 
 }
 configurations.all {
