@@ -9,6 +9,8 @@ management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
 
 management.health.diskspace.enabled: false
+management.health.circuitbreakers.enabled: true
+management.health.ratelimiters.enabled: true
 
 info:
     name: ${spring.application.name}
