@@ -7,7 +7,6 @@ import io.github.resilience4j.retry.annotation.Retry;
 import io.github.robwin.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import reactor.core.publisher.Flux;

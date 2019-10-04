@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
 		classes = Application.class)
 @DirtiesContext
 public class RetryTest {
 
-	private static final String BACKEND_A = "backendB";
+	private static final String BACKEND_B = "backendB";
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -26,16 +27,16 @@ public class RetryTest {
 	@Test
 	public void shouldRetryThreeTimes() {
 		// When
-		produceFailure(BACKEND_A);
+		produceFailure(BACKEND_B);
 
-		checkMetrics("failed_with_retry", BACKEND_A, "1.0");
+		checkMetrics("failed_with_retry", BACKEND_B, "1.0");
 	}
 
 	@Test
 	public void shouldSucceedWithoutRetry() {
-		produceSuccess(BACKEND_A);
+		produceSuccess(BACKEND_B);
 
-		checkMetrics("successful_without_retry", BACKEND_A, "1.0");
+		checkMetrics("successful_without_retry", BACKEND_B, "1.0");
 	}
 
 	private void checkMetrics(String kind, String backend, String count) {
