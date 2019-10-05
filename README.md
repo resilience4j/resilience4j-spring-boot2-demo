@@ -19,7 +19,7 @@ docker-compose -f docker-compose.yml up
 2. Start the demo project through the main class.
 
 3. Check the prometheus:
-- Open http://localhost:9090
+- Open http://localhost:9080
 - Access status -> Targets, both endpoints must be "UP"
 
 4. Configure the grafana:
@@ -28,7 +28,7 @@ docker-compose -f docker-compose.yml up
     - Access configuration
     - Add data source
     - Select prometheus
-    - Use url "http://localhost:9090" and access with value "Browser"
+    - Use url "http://localhost:9080" and access with value "Browser"
 
 - Configure dashboard
     - Access "home"
