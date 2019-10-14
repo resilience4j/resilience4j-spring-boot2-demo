@@ -11,26 +11,31 @@ See [User Guide](https://resilience4j.readme.io/docs/getting-started-3) for more
 
 ## Getting Started
 
-1. Use docker-compose to start grafana and prometheus servers.
-- In the root folder:
+Just run the application in your IDE.  
+Application is running on http://localhost:9080.
+
+## Monitoring with Prometheus and Grafana (OPTIONAL)
+ 
+### Step 1
+Use docker-compose to start grafana and prometheus servers.
+- In the root folder
 ```sh
 docker-compose -f docker-compose.yml up
 ```
-2. Start the demo project through the main class.
-
-3. Check the prometheus:
-- Open http://localhost:9080
+### Step 2
+Check the prometheus server.
+- Open http://localhost:9090
 - Access status -> Targets, both endpoints must be "UP"
 
-4. Configure the grafana:
+### Step 3
+Configure the grafana.
 - Open http://localhost:3000
-- Configure integration with Prometheus
+- **Configure integration with Prometheus**
     - Access configuration
     - Add data source
     - Select prometheus
     - Use url "http://localhost:9080" and access with value "Browser"
-
-- Configure dashboard
+- **Configure dashboard**
     - Access "home"
     - Import dashboard
     - Upload dashboard.json from /docker
