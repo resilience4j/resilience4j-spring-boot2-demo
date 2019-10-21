@@ -11,7 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import static io.github.resilience4j.circuitbreaker.CircuitBreaker.*;
+import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)

@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.8.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.2.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -18,31 +18,30 @@ apply plugin: 'io.spring.dependency-management'
 sourceCompatibility = 1.8
 
 repositories {
-	//mavenLocal()
-	//jcenter()
-	mavenCentral()
-	//maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
-
-
+    //mavenLocal()
+    //jcenter()
+    mavenCentral()
+    //maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
+
 configurations.all {
-	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
-ext{
-	resilience4jVersion = '1.1.0'
+ext {
+    resilience4jVersion = '1.1.0'
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-webflux')
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-aop')
+    compile('org.springframework.boot:spring-boot-starter-webflux')
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-aop')
 
-	compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
-	compile("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
-	compile("io.micrometer:micrometer-registry-prometheus")
-	
-	compile("io.vavr:vavr-jackson:0.10.0")
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('io.projectreactor:reactor-test')
+    compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
+    compile("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
+    compile("io.micrometer:micrometer-registry-prometheus")
+
+    compile("io.vavr:vavr-jackson:0.10.2")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('io.projectreactor:reactor-test')
 }

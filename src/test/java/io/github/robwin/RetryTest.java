@@ -55,6 +55,4 @@ public class RetryTest {
 		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/success", String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
-
-
 }

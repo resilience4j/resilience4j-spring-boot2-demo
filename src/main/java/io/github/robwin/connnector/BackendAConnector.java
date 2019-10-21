@@ -1,6 +1,5 @@
 package io.github.robwin.connnector;
 
-
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -15,7 +14,7 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
-import static io.github.resilience4j.bulkhead.annotation.Bulkhead.*;
+import static io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
 
 /**
  * This Connector shows how to use the CircuitBreaker annotation.
@@ -23,7 +22,7 @@ import static io.github.resilience4j.bulkhead.annotation.Bulkhead.*;
 @CircuitBreaker(name = "backendA")
 @RateLimiter(name = "backendA")
 @Component(value = "backendAConnector")
-public class BackendAConnector implements Connector {
+class BackendAConnector implements Connector {
 
     @Override
     @Bulkhead(name = "backendA")

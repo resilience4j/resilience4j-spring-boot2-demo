@@ -9,11 +9,11 @@ import reactor.core.publisher.Mono;
 import java.util.concurrent.CompletableFuture;
 
 @Service(value = "businessAService")
-public class BusinessAService implements BusinessService {
+class BusinessAService implements BusinessService {
 
     private final Connector backendAConnector;
 
-    public BusinessAService(@Qualifier("backendAConnector") Connector backendAConnector){
+    BusinessAService(@Qualifier("backendAConnector") Connector backendAConnector) {
         this.backendAConnector = backendAConnector;
     }
 

@@ -1,6 +1,5 @@
 package io.github.robwin.service;
 
-
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator;
@@ -13,13 +12,13 @@ import reactor.core.publisher.Mono;
 import java.util.concurrent.CompletableFuture;
 
 @Service(value = "businessBService")
-public class BusinessBService implements BusinessService  {
+class BusinessBService implements BusinessService {
 
     private final Connector backendBConnector;
     private final CircuitBreaker circuitBreaker;
 
-    public BusinessBService(@Qualifier("backendBConnector") Connector backendBConnector,
-                            CircuitBreakerRegistry circuitBreakerRegistry){
+    BusinessBService(@Qualifier("backendBConnector") Connector backendBConnector,
+                     CircuitBreakerRegistry circuitBreakerRegistry) {
         this.backendBConnector = backendBConnector;
         circuitBreaker = circuitBreakerRegistry.circuitBreaker("backendB");
     }

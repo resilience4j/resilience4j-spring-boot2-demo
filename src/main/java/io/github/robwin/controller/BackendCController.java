@@ -12,66 +12,66 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping(value = "/backendC")
-public class BackendCController {
+class BackendCController {
 
     private final BusinessService businessCService;
 
-    public BackendCController(@Qualifier("businessCService")BusinessService businessCService){
+    BackendCController(@Qualifier("businessCService")BusinessService businessCService) {
         this.businessCService = businessCService;
     }
 
     @GetMapping("failure")
-    public String failure(){
+    public String failure() {
         return businessCService.failure();
     }
 
     @GetMapping("success")
-    public String success(){
+    public String success() {
         return businessCService.success();
     }
 
     @GetMapping("successException")
-    public String successException(){
+    public String successException() {
         return businessCService.successException();
     }
 
     @GetMapping("ignore")
-    public String ignore(){
+    public String ignore() {
         return businessCService.ignore();
     }
 
     @GetMapping("monoSuccess")
-    public Mono<String> monoSuccess(){
+    public Mono<String> monoSuccess() {
         return businessCService.monoSuccess();
     }
 
     @GetMapping("monoFailure")
-    public Mono<String> monoFailure(){
+    public Mono<String> monoFailure() {
         return businessCService.monoFailure();
     }
 
     @GetMapping("fluxSuccess")
-    public Flux<String> fluxSuccess(){
+    public Flux<String> fluxSuccess() {
         return businessCService.fluxSuccess();
     }
 
     @GetMapping("fluxFailure")
-    public Flux<String> fluxFailure(){
+    public Flux<String> fluxFailure() {
         return businessCService.fluxFailure();
     }
 
     @GetMapping("futureFailure")
-    public CompletableFuture<String> futureFailure(){
+    public CompletableFuture<String> futureFailure() {
         return businessCService.futureFailure();
     }
 
     @GetMapping("futureSuccess")
-    public CompletableFuture<String> futureSuccess(){
+    public CompletableFuture<String> futureSuccess() {
         return businessCService.futureSuccess();
     }
 
     @GetMapping("fallback")
-    public String failureWithFallback(){
+    public String failureWithFallback() {
         return businessCService.failureWithFallback();
     }
 }

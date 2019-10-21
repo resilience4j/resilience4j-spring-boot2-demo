@@ -1,6 +1,5 @@
 package io.github.robwin.service;
 
-
 import io.github.robwin.connnector.Connector;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,11 +9,11 @@ import reactor.core.publisher.Mono;
 import java.util.concurrent.CompletableFuture;
 
 @Service(value = "businessCService")
-public class BusinessCService implements BusinessService  {
+class BusinessCService implements BusinessService {
 
     private final Connector backendCConnector;
 
-    public BusinessCService(@Qualifier("backendCConnector") Connector backendCConnector){
+    BusinessCService(@Qualifier("backendCConnector") Connector backendCConnector) {
         this.backendCConnector = backendCConnector;
     }
 

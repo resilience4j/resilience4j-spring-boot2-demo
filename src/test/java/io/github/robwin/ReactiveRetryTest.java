@@ -33,6 +33,7 @@ public class ReactiveRetryTest {
 
 	@Test
 	public void shouldSucceedWithoutRetry() {
+		// When
 		produceSuccess(BACKEND_B);
 
 		checkMetrics("successful_without_retry", BACKEND_B, "1.0");
@@ -54,6 +55,4 @@ public class ReactiveRetryTest {
 		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/monoSuccess", String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
-
-
 }

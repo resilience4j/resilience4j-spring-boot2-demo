@@ -27,5 +27,4 @@ public interface Connector {
     CompletableFuture<String> futureSuccess();
 
     CompletableFuture<String> futureFailure();
-
 }

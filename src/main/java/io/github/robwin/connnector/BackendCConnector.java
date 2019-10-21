@@ -1,6 +1,5 @@
 package io.github.robwin.connnector;
 
-
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -20,7 +19,7 @@ import static io.github.resilience4j.bulkhead.annotation.Bulkhead.*;
 @CircuitBreaker(name = "backendC")
 @Retry(name = "backendC")
 @Component(value = "backendCConnector")
-public class BackendCConnector implements Connector {
+class BackendCConnector implements Connector {
 
     @Override
     @Bulkhead(name = "backendC")
