@@ -34,7 +34,7 @@ Configure the Grafana.
     - Access configuration
     - Add data source
     - Select Prometheus
-    - Use url "http://localhost:9080" and access with value "Browser"
+    - Use url "http://localhost:9090" and access with value "Browser"
 - **Configure dashboard**
     - Access "home"
     - Import dashboard
