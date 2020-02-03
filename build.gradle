@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.1.8.RELEASE'
+		springBootVersion = '2.2.4.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -19,9 +19,11 @@ sourceCompatibility = 1.8
 
 repositories {
 	//mavenLocal()
+	
 	//jcenter()
 	mavenCentral()
-	//maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+
 
 
 }
@@ -30,7 +32,7 @@ configurations.all {
 }
 
 ext{
-	resilience4jVersion = '1.1.0'
+	resilience4jVersion = '1.2.1-SNAPSHOT'
 }
 
 dependencies {
@@ -41,6 +43,8 @@ dependencies {
 	compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
 	compile("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
 	compile("io.micrometer:micrometer-registry-prometheus")
+
+	compile 'de.codecentric:chaos-monkey-spring-boot:2.1.1'
 	
 	compile("io.vavr:vavr-jackson:0.10.0")
 	testCompile('org.springframework.boot:spring-boot-starter-test')

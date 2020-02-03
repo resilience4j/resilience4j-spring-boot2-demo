@@ -1,12 +1,14 @@
-package io.github.robwin.connnector;
+package io.github.robwin.service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface Connector {
+public interface Service {
     String failure();
+
+    String failureWithFallback();
 
     String success();
 
@@ -16,16 +18,22 @@ public interface Connector {
 
     Flux<String> fluxFailure();
 
+    Flux<String> fluxTimeout();
+
     Mono<String> monoSuccess();
 
     Mono<String> monoFailure();
 
-    Flux<String> fluxSuccess();
+    Mono<String> monoTimeout();
 
-    String failureWithFallback();
+    Flux<String> fluxSuccess();
 
     CompletableFuture<String> futureSuccess();
 
     CompletableFuture<String> futureFailure();
+
+    CompletableFuture<String> futureWithFallback();
+
+    CompletableFuture<String> futureTimeout();
 
 }

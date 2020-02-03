@@ -42,7 +42,7 @@ public class ReactiveRetryTest {
 		ResponseEntity<String> metricsResponse = restTemplate.getForEntity("/actuator/prometheus", String.class);
 		assertThat(metricsResponse.getBody()).isNotNull();
 		String response = metricsResponse.getBody();
-		assertThat(response).contains("resilience4j_retry_calls{application=\"resilience4j-demo\",kind=\"" + kind + "\",name=\"" +  backend + "\",} " + count);
+		assertThat(response).contains("resilience4j_retry_calls_total{application=\"resilience4j-demo\",kind=\"" + kind + "\",name=\"" +  backend + "\",} " + count);
 	}
 
 	private void produceFailure(String backend) {

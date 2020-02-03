@@ -1,6 +1,6 @@
 package io.github.robwin.controller;
 
-import io.github.robwin.service.BusinessService;
+import io.github.robwin.service.Service;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +14,9 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping(value = "/backendB")
 public class BackendBController {
 
-    private final BusinessService businessBService;
+    private final Service businessBService;
 
-    public BackendBController(@Qualifier("businessBService")BusinessService businessBService){
+    public BackendBController(@Qualifier("backendBService")Service businessBService){
         this.businessBService = businessBService;
     }
 
@@ -37,7 +37,7 @@ public class BackendBController {
 
     @GetMapping("ignore")
     public String ignore(){
-        return businessBService.ignore();
+        return businessBService.ignoreException();
     }
 
     @GetMapping("monoSuccess")
@@ -60,6 +60,16 @@ public class BackendBController {
         return businessBService.fluxFailure();
     }
 
+    @GetMapping("monoTimeout")
+    public Mono<String> monoTimeout(){
+        return businessBService.monoTimeout();
+    }
+
+    @GetMapping("fluxTimeout")
+    public Flux<String> fluxTimeout(){
+        return businessBService.fluxTimeout();
+    }
+
     @GetMapping("futureFailure")
     public CompletableFuture<String> futureFailure(){
         return businessBService.futureFailure();
@@ -68,6 +78,11 @@ public class BackendBController {
     @GetMapping("futureSuccess")
     public CompletableFuture<String> futureSuccess(){
         return businessBService.futureSuccess();
+    }
+
+    @GetMapping("futureTimeout")
+    public CompletableFuture<String> futureTimeout(){
+        return businessBService.futureTimeout();
     }
 
     @GetMapping("fallback")

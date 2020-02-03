@@ -9,8 +9,8 @@ management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
 
 management.health.diskspace.enabled: false
-management.health.circuitbreakers.enabled: true
-management.health.ratelimiters.enabled: true
+management.health.circuitbreakers.enabled: false
+management.health.ratelimiters.enabled: false
 
 info:
     name: ${spring.application.name}
@@ -116,3 +116,13 @@ resilience4j.ratelimiter:
             limitForPeriod: 6
             limitRefreshPeriod: 500ms
             timeoutDuration: 3s
+resilience4j:
+    configs:
+        default:
+            cancelRunningFuture: false
+            timeoutDuration: 2s
+    instances:
+        backendA:
+            baseConfig: default
+        backendB:
+            baseConfig: default
