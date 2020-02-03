@@ -32,8 +32,6 @@ public interface Service {
 
     CompletableFuture<String> futureFailure();
 
-    CompletableFuture<String> futureWithFallback();
-
     CompletableFuture<String> futureTimeout();
 
 }
