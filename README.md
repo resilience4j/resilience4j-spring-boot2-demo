@@ -6,6 +6,12 @@ This demo shows how to use the fault tolerance library [Resilience4j](https://gi
 
 See [User Guide](https://resilience4j.readme.io/docs/getting-started-3) for more details.
 
+The [BackendAService](https://github.com/resilience4j/resilience4j-spring-boot2-demo/blob/master/src/main/java/io/github/robwin/service/BackendAService.java) shows how to use the Resilience4j Annotations.
+
+
+The [BackendBController](https://github.com/resilience4j/resilience4j-spring-boot2-demo/blob/master/src/main/java/io/github/robwin/controller/BackendBController.java) shows how to use the functional style and the Spring Reactor operators.
+
+
 ## Getting Started
 
 Just run the Application.java in your IDE.  
