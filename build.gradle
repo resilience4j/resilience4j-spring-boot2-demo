@@ -51,7 +51,3 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('io.projectreactor:reactor-test')
 }
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '6.1.1' //version required
-}
