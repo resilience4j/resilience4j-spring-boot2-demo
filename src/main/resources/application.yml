@@ -9,7 +9,7 @@ management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
 
 management.health.diskspace.enabled: false
-management.health.circuitbreakers.enabled: false
+management.health.circuitbreakers.enabled: true
 management.health.ratelimiters.enabled: false
 
 info:
@@ -27,7 +27,7 @@ management.metrics.distribution.percentiles-histogram.resilience4j.circuitbreake
 resilience4j.circuitbreaker:
     configs:
         default:
-            registerHealthIndicator: false
+            registerHealthIndicator: true
             slidingWindowSize: 10
             minimumNumberOfCalls: 5
             permittedNumberOfCallsInHalfOpenState: 3
@@ -42,7 +42,6 @@ resilience4j.circuitbreaker:
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
         shared:
-            registerHealthIndicator: true
             slidingWindowSize: 100
             permittedNumberOfCallsInHalfOpenState: 30
             waitDurationInOpenState: 1s

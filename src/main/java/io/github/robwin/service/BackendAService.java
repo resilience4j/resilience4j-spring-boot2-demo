@@ -70,8 +70,8 @@ public class BackendAService implements Service {
     }
 
     @Override
-    @TimeLimiter(name = BACKEND_A, fallbackMethod = "fluxFallback")
-    @CircuitBreaker(name = BACKEND_A)
+    @TimeLimiter(name = BACKEND_A)
+    @CircuitBreaker(name = BACKEND_A, fallbackMethod = "fluxFallback")
     public Flux<String> fluxTimeout() {
         return Flux.
                 just("Hello World from backend A")
@@ -96,9 +96,9 @@ public class BackendAService implements Service {
     }
 
     @Override
-    @TimeLimiter(name = BACKEND_A, fallbackMethod = "monoFallback")
+    @TimeLimiter(name = BACKEND_A)
     @Bulkhead(name = BACKEND_A)
-    @CircuitBreaker(name = BACKEND_A)
+    @CircuitBreaker(name = BACKEND_A, fallbackMethod = "monoFallback")
     public Mono<String> monoTimeout() {
         return Mono.just("Hello World from backend A")
                 .delayElement(Duration.ofSeconds(10));
@@ -140,8 +140,8 @@ public class BackendAService implements Service {
 
     @Override
     @Bulkhead(name = BACKEND_A, type = Type.THREADPOOL)
-    @TimeLimiter(name = BACKEND_A, fallbackMethod = "futureFallback")
-    @CircuitBreaker(name = BACKEND_A)
+    @TimeLimiter(name = BACKEND_A)
+    @CircuitBreaker(name = BACKEND_A, fallbackMethod = "futureFallback")
     public CompletableFuture<String> futureTimeout() {
         Try.ofCallable(this::timeout);
         return CompletableFuture.completedFuture("Hello World from backend A");
