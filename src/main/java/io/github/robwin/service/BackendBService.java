@@ -64,7 +64,7 @@ public class BackendBService implements Service {
 
     @Override
     public Mono<String> monoTimeout() {
-        return Mono. just("Hello World from backend B")
+        return Mono.just("Hello World from backend B")
                 .delayElement(Duration.ofSeconds(10));
     }
 
@@ -87,17 +87,8 @@ public class BackendBService implements Service {
 
     @Override
     public CompletableFuture<String> futureTimeout() {
-        Try.ofCallable(this::timeout);
+        Try.run(() -> Thread.sleep(5000));
         return CompletableFuture.completedFuture("Hello World from backend A");
-    }
-
-    private String timeout(){
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     @Override

@@ -143,7 +143,7 @@ public class BackendAService implements Service {
     @TimeLimiter(name = BACKEND_A)
     @CircuitBreaker(name = BACKEND_A, fallbackMethod = "futureFallback")
     public CompletableFuture<String> futureTimeout() {
-        Try.ofCallable(this::timeout);
+        Try.run(() -> Thread.sleep(5000));
         return CompletableFuture.completedFuture("Hello World from backend A");
     }
 
@@ -173,14 +173,5 @@ public class BackendAService implements Service {
 
     private Flux<String> fluxFallback(Exception ex) {
         return Flux.just("Recovered: " + ex.toString());
-    }
-
-    private String timeout(){
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 }
