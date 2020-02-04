@@ -37,6 +37,7 @@ resilience4j.circuitbreaker:
             eventConsumerBufferSize: 10
             recordExceptions:
                 - org.springframework.web.client.HttpServerErrorException
+                - java.util.concurrent.TimeoutException
                 - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
@@ -68,14 +69,15 @@ resilience4j.retry:
             waitDuration: 100
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
+                - java.util.concurrent.TimeoutException
                 - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
     instances:
         backendA:
-            maxRetryAttempts: 3
+            baseConfig: default
         backendB:
-            maxRetryAttempts: 3
+            baseConfig: default
 resilience4j.bulkhead:
     configs:
         default:
