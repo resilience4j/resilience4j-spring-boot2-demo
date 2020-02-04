@@ -5,6 +5,7 @@ import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.github.robwin.exception.BusinessException;
+import io.vavr.control.Try;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -105,7 +106,8 @@ public class BackendCService implements Service {
     @Bulkhead(name = "backendA", type = Type.THREADPOOL)
     @TimeLimiter(name = "backendA", fallbackMethod = "fallback")
     public CompletableFuture<String> futureTimeout() {
-        return CompletableFuture.supplyAsync(this::timeout);
+        Try.ofCallable(this::timeout);
+        return CompletableFuture.completedFuture("Hello World from backend A");
     }
 
     @Override

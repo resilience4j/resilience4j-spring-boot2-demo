@@ -87,7 +87,8 @@ public class BackendBService implements Service {
 
     @Override
     public CompletableFuture<String> futureTimeout() {
-        return CompletableFuture.supplyAsync(this::timeout);
+        Try.ofCallable(this::timeout);
+        return CompletableFuture.completedFuture("Hello World from backend A");
     }
 
     private String timeout(){
