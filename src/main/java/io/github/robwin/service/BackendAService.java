@@ -1,7 +1,9 @@
 package io.github.robwin.service;
 
 
+import io.github.resilience4j.bulkhead.BulkheadFullException;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
@@ -94,10 +96,10 @@ public class BackendAService implements Service {
 
     @Override
     @TimeLimiter(name = BACKEND_A, fallbackMethod = "monoFallback")
+    @Bulkhead(name = BACKEND_A)
     @CircuitBreaker(name = BACKEND_A)
     public Mono<String> monoTimeout() {
-        return Mono.
-                just("Hello World from backend A")
+        return Mono.just("Hello World from backend A")
                 .delayElement(Duration.ofSeconds(10));
     }
 
@@ -137,12 +139,10 @@ public class BackendAService implements Service {
 
     @Override
     @Bulkhead(name = BACKEND_A, type = Type.THREADPOOL)
-    @TimeLimiter(name = BACKEND_A, fallbackMethod = "fallbackTimeoutException")
+    @TimeLimiter(name = BACKEND_A, fallbackMethod = "futureFallback")
     @CircuitBreaker(name = BACKEND_A)
     public CompletableFuture<String> futureTimeout() {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        // Never complete
-        return future;
+        return CompletableFuture.supplyAsync(this::timeout);
     }
 
     private String fallback(HttpServerErrorException ex) {
@@ -153,8 +153,16 @@ public class BackendAService implements Service {
         return "Recovered: " + ex.toString();
     }
 
-    private CompletableFuture<String> fallbackTimeoutException(TimeoutException ex) {
+    private CompletableFuture<String> futureFallback(TimeoutException ex) {
         return CompletableFuture.completedFuture("Recovered specific TimeoutException: " + ex.toString());
+    }
+
+    private CompletableFuture<String> futureFallback(BulkheadFullException ex) {
+        return CompletableFuture.completedFuture("Recovered specific BulkheadFullException: " + ex.toString());
+    }
+
+    private CompletableFuture<String> futureFallback(CallNotPermittedException ex) {
+        return CompletableFuture.completedFuture("Recovered specific CallNotPermittedException: " + ex.toString());
     }
 
     private Mono<String> monoFallback(Exception ex) {
@@ -163,5 +171,14 @@ public class BackendAService implements Service {
 
     private Flux<String> fluxFallback(Exception ex) {
         return Flux.just("Recovered: " + ex.toString());
+    }
+
+    private String timeout(){
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

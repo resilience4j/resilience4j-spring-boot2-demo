@@ -48,8 +48,7 @@ public class BackendBService implements Service {
 
     @Override
     public Flux<String> fluxTimeout() {
-        return Flux.
-                just("Hello World from backend A")
+        return Flux.just("Hello World from backend B")
                 .delayElements(Duration.ofSeconds(10));
     }
 
@@ -65,8 +64,7 @@ public class BackendBService implements Service {
 
     @Override
     public Mono<String> monoTimeout() {
-        return Mono.
-                just("Hello World from backend A")
+        return Mono. just("Hello World from backend B")
                 .delayElement(Duration.ofSeconds(10));
     }
 
@@ -89,9 +87,16 @@ public class BackendBService implements Service {
 
     @Override
     public CompletableFuture<String> futureTimeout() {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        // Never complete
-        return future;
+        return CompletableFuture.supplyAsync(this::timeout);
+    }
+
+    private String timeout(){
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override

@@ -57,7 +57,7 @@ public class BackendCService implements Service {
     @TimeLimiter(name = BACKEND_C, fallbackMethod = "fluxFallback")
     public Flux<String> fluxTimeout() {
         return Flux.
-                just("Hello World from backend A")
+                just("Hello World from backend C")
                 .delayElements(Duration.ofSeconds(10));
     }
 
@@ -77,7 +77,7 @@ public class BackendCService implements Service {
     @TimeLimiter(name = BACKEND_C, fallbackMethod = "monoFallback")
     public Mono<String> monoTimeout() {
         return Mono.
-                just("Hello World from backend A")
+                just("Hello World from backend C")
                 .delayElement(Duration.ofSeconds(10));
     }
 
@@ -105,9 +105,7 @@ public class BackendCService implements Service {
     @Bulkhead(name = "backendA", type = Type.THREADPOOL)
     @TimeLimiter(name = "backendA", fallbackMethod = "fallback")
     public CompletableFuture<String> futureTimeout() {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        // Never complete
-        return future;
+        return CompletableFuture.supplyAsync(this::timeout);
     }
 
     @Override
@@ -130,5 +128,14 @@ public class BackendCService implements Service {
 
     private Flux<String> fluxFallback(Throwable ex) {
         return Flux.just("Recovered: " + ex.toString());
+    }
+
+    private String timeout(){
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
