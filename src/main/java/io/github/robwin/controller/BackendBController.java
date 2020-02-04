@@ -191,7 +191,6 @@ public class BackendBController {
                 .withThreadPoolBulkhead(threadPoolBulkhead)
                 .withTimeLimiter(timeLimiter, scheduledExecutorService)
                 .withCircuitBreaker(circuitBreaker)
-                .withBulkhead(bulkhead)
                 .get().toCompletableFuture();
     }
 
@@ -200,7 +199,6 @@ public class BackendBController {
                 .withThreadPoolBulkhead(threadPoolBulkhead)
                 .withTimeLimiter(timeLimiter, scheduledExecutorService)
                 .withCircuitBreaker(circuitBreaker)
-                .withBulkhead(bulkhead)
                 .withFallback(asList(TimeoutException.class, CallNotPermittedException.class, BulkheadFullException.class),
                         fallback)
                 .get().toCompletableFuture();
