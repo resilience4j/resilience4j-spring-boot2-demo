@@ -147,32 +147,34 @@ public class BackendBController {
 
     private <T> Mono<T> execute(Mono<T> publisher){
         return publisher
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
                 .transform(BulkheadOperator.of(bulkhead))
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
                 .transform(RetryOperator.of(retry));
     }
 
     private <T> Flux<T> execute(Flux<T> publisher){
         return publisher
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
                 .transform(BulkheadOperator.of(bulkhead))
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
                 .transform(RetryOperator.of(retry));
     }
 
 
     private <T> Mono<T> executeWithFallback(Mono<T> publisher, Function<Throwable, Mono<T>> fallback){
-        return publisher.transform(TimeLimiterOperator.of(timeLimiter))
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
+        return publisher
+                .transform(TimeLimiterOperator.of(timeLimiter))
                 .transform(BulkheadOperator.of(bulkhead))
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
                 .onErrorResume(TimeoutException.class, fallback)
                 .onErrorResume(CallNotPermittedException.class, fallback)
                 .onErrorResume(BulkheadFullException.class, fallback);
     }
 
     private <T> Flux<T> executeWithFallback(Flux<T> publisher, Function<Throwable, Flux<T>> fallback){
-        return publisher.transform(TimeLimiterOperator.of(timeLimiter))
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
+        return publisher
+                .transform(TimeLimiterOperator.of(timeLimiter))
                 .transform(BulkheadOperator.of(bulkhead))
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
                 .onErrorResume(TimeoutException.class, fallback)
                 .onErrorResume(CallNotPermittedException.class, fallback)
                 .onErrorResume(BulkheadFullException.class, fallback);
@@ -191,6 +193,7 @@ public class BackendBController {
                 .withThreadPoolBulkhead(threadPoolBulkhead)
                 .withTimeLimiter(timeLimiter, scheduledExecutorService)
                 .withCircuitBreaker(circuitBreaker)
+                .withRetry(retry,scheduledExecutorService)
                 .get().toCompletableFuture();
     }
 

@@ -65,7 +65,7 @@ resilience4j.circuitbreaker:
 resilience4j.retry:
     configs:
         default:
-            maxRetryAttempts: 2
+            maxRetryAttempts: 3
             waitDuration: 100
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException

@@ -19,12 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RetryTest {
 
 	private static final String BACKEND_A = "backendA";
+	private static final String BACKEND_B = "backendB";
 
 	@Autowired
 	private TestRestTemplate restTemplate;
 
 	@Test
-	public void shouldRetryThreeTimes() {
+	public void backendAshouldRetryThreeTimes() {
 		// When
 		produceFailure(BACKEND_A);
 
@@ -32,10 +33,25 @@ public class RetryTest {
 	}
 
 	@Test
-	public void shouldSucceedWithoutRetry() {
+	public void backendBshouldRetryThreeTimes() {
+		// When
+		produceFailure(BACKEND_B);
+
+		checkMetrics("failed_with_retry", BACKEND_B, "1.0");
+	}
+
+	@Test
+	public void backendAshouldSucceedWithoutRetry() {
 		produceSuccess(BACKEND_A);
 
 		checkMetrics("successful_without_retry", BACKEND_A, "1.0");
+	}
+
+	@Test
+	public void backendBshouldSucceedWithoutRetry() {
+		produceSuccess(BACKEND_B);
+
+		checkMetrics("successful_without_retry", BACKEND_B, "1.0");
 	}
 
 	private void checkMetrics(String kind, String backend, String count) {
