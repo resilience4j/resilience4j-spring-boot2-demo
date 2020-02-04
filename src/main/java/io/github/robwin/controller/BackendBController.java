@@ -1,9 +1,7 @@
 package io.github.robwin.controller;
 
-import io.github.resilience4j.bulkhead.Bulkhead;
-import io.github.resilience4j.bulkhead.BulkheadRegistry;
-import io.github.resilience4j.bulkhead.ThreadPoolBulkhead;
-import io.github.resilience4j.bulkhead.ThreadPoolBulkheadRegistry;
+import io.github.resilience4j.bulkhead.*;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.decorators.Decorators;
@@ -29,6 +27,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static java.util.Arrays.asList;
 
 @RestController
 @RequestMapping(value = "/backendB")
@@ -64,28 +66,17 @@ public class BackendBController {
 
     @GetMapping("failure")
     public String failure(){
-        return Decorators.ofSupplier(businessBService::failure)
-            .withCircuitBreaker(circuitBreaker)
-            .withBulkhead(bulkhead)
-            .withRetry(retry)
-            .get();
+        return execute(businessBService::failure);
     }
 
     @GetMapping("success")
     public String success(){
-        return Decorators.ofSupplier(businessBService::success)
-                .withCircuitBreaker(circuitBreaker)
-                .withBulkhead(bulkhead)
-                .withRetry(retry)
-                .get();
+        return execute(businessBService::success);
     }
 
     @GetMapping("successException")
     public String successException(){
-        return Decorators.ofSupplier(businessBService::successException)
-                .withCircuitBreaker(circuitBreaker)
-                .withBulkhead(bulkhead)
-                .get();
+        return execute(businessBService::successException);
     }
 
     @GetMapping("ignore")
@@ -97,87 +88,47 @@ public class BackendBController {
 
     @GetMapping("monoSuccess")
     public Mono<String> monoSuccess(){
-        return businessBService.monoSuccess()
-            .transform(TimeLimiterOperator.of(timeLimiter))
-            .transform(CircuitBreakerOperator.of(circuitBreaker))
-            .transform(BulkheadOperator.of(bulkhead))
-            .transform(RetryOperator.of(retry));
+        return execute(businessBService.monoSuccess());
     }
 
     @GetMapping("monoFailure")
     public Mono<String> monoFailure() {
-        return businessBService.monoFailure()
-                .transform(TimeLimiterOperator.of(timeLimiter))
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
-                .transform(BulkheadOperator.of(bulkhead))
-                .transform(RetryOperator.of(retry));
+        return execute(businessBService.monoFailure());
     }
 
     @GetMapping("fluxSuccess")
     public Flux<String> fluxSuccess(){
-        return businessBService.fluxSuccess()
-                .transform(TimeLimiterOperator.of(timeLimiter))
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
-                .transform(BulkheadOperator.of(bulkhead))
-                .transform(RetryOperator.of(retry));
+        return execute(businessBService.fluxFailure());
     }
 
     @GetMapping("fluxFailure")
     public Flux<String> fluxFailure(){
-        return businessBService.fluxFailure()
-                .transform(TimeLimiterOperator.of(timeLimiter))
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
-                .transform(BulkheadOperator.of(bulkhead))
-                .transform(RetryOperator.of(retry));
+        return execute(businessBService.fluxFailure());
     }
 
     @GetMapping("monoTimeout")
     public Mono<String> monoTimeout(){
-        return businessBService.monoTimeout()
-                .transform(TimeLimiterOperator.of(timeLimiter))
-                .onErrorResume(TimeoutException.class, this::monoFallback)
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
-                .transform(BulkheadOperator.of(bulkhead));
+        return executeWithFallback(businessBService.monoTimeout(), this::monoFallback);
     }
 
     @GetMapping("fluxTimeout")
     public Flux<String> fluxTimeout(){
-        return businessBService.fluxTimeout()
-                .transform(TimeLimiterOperator.of(timeLimiter))
-                .onErrorResume(TimeoutException.class, this::fluxFallback)
-                .transform(CircuitBreakerOperator.of(circuitBreaker))
-                .transform(BulkheadOperator.of(bulkhead));
+        return executeWithFallback(businessBService.fluxTimeout(), this::fluxFallback);
     }
 
     @GetMapping("futureFailure")
     public CompletableFuture<String> futureFailure(){
-        return Decorators.ofSupplier(businessBService::failure)
-                .withThreadPoolBulkhead(threadPoolBulkhead)
-                .withTimeLimiter(timeLimiter, scheduledExecutorService)
-                .withCircuitBreaker(circuitBreaker)
-                .withRetry(retry, scheduledExecutorService)
-                .get().toCompletableFuture();
+        return executeAsync(businessBService::failure);
     }
 
     @GetMapping("futureSuccess")
     public CompletableFuture<String> futureSuccess(){
-        return Decorators.ofSupplier(businessBService::success)
-                .withThreadPoolBulkhead(threadPoolBulkhead)
-                .withTimeLimiter(timeLimiter, scheduledExecutorService)
-                .withCircuitBreaker(circuitBreaker)
-                .withRetry(retry, scheduledExecutorService)
-                .get().toCompletableFuture();
+        return executeAsync(businessBService::success);
     }
 
     @GetMapping("futureTimeout")
     public CompletableFuture<String> futureTimeout(){
-        return Decorators.ofSupplier(this::timeout)
-                .withThreadPoolBulkhead(threadPoolBulkhead)
-                .withTimeLimiter(timeLimiter, scheduledExecutorService)
-                .withFallback(TimeoutException.class, this::fallback)
-                .withCircuitBreaker(circuitBreaker)
-                .withBulkhead(bulkhead)
-                .get().toCompletableFuture();
+        return executeAsyncWithFallback(this::timeout, this::fallback);
     }
 
     @GetMapping("fallback")
@@ -192,6 +143,67 @@ public class BackendBController {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private <T> Mono<T> execute(Mono<T> publisher){
+        return publisher
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
+                .transform(BulkheadOperator.of(bulkhead))
+                .transform(RetryOperator.of(retry));
+    }
+
+    private <T> Flux<T> execute(Flux<T> publisher){
+        return publisher
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
+                .transform(BulkheadOperator.of(bulkhead))
+                .transform(RetryOperator.of(retry));
+    }
+
+
+    private <T> Mono<T> executeWithFallback(Mono<T> publisher, Function<Throwable, Mono<T>> fallback){
+        return publisher.transform(TimeLimiterOperator.of(timeLimiter))
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
+                .transform(BulkheadOperator.of(bulkhead))
+                .onErrorResume(TimeoutException.class, fallback)
+                .onErrorResume(CallNotPermittedException.class, fallback)
+                .onErrorResume(BulkheadFullException.class, fallback);
+    }
+
+    private <T> Flux<T> executeWithFallback(Flux<T> publisher, Function<Throwable, Flux<T>> fallback){
+        return publisher.transform(TimeLimiterOperator.of(timeLimiter))
+                .transform(CircuitBreakerOperator.of(circuitBreaker))
+                .transform(BulkheadOperator.of(bulkhead))
+                .onErrorResume(TimeoutException.class, fallback)
+                .onErrorResume(CallNotPermittedException.class, fallback)
+                .onErrorResume(BulkheadFullException.class, fallback);
+    }
+
+    private <T> T execute(Supplier<T> supplier){
+        return Decorators.ofSupplier(supplier)
+                .withCircuitBreaker(circuitBreaker)
+                .withBulkhead(bulkhead)
+                .withRetry(retry)
+                .get();
+    }
+
+    private <T> CompletableFuture<T> executeAsync(Supplier<T> supplier){
+        return Decorators.ofSupplier(supplier)
+                .withThreadPoolBulkhead(threadPoolBulkhead)
+                .withTimeLimiter(timeLimiter, scheduledExecutorService)
+                .withCircuitBreaker(circuitBreaker)
+                .withBulkhead(bulkhead)
+                .get().toCompletableFuture();
+    }
+
+    private <T> CompletableFuture<T> executeAsyncWithFallback(Supplier<T> supplier, Function<Throwable, T> fallback){
+        return Decorators.ofSupplier(supplier)
+                .withThreadPoolBulkhead(threadPoolBulkhead)
+                .withTimeLimiter(timeLimiter, scheduledExecutorService)
+                .withCircuitBreaker(circuitBreaker)
+                .withBulkhead(bulkhead)
+                .withFallback(asList(TimeoutException.class, CallNotPermittedException.class, BulkheadFullException.class),
+                        fallback)
+                .get().toCompletableFuture();
     }
 
     private String fallback(Throwable ex) {

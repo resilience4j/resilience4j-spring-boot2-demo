@@ -59,7 +59,6 @@ public class BackendAService implements Service {
     }
 
     @Override
-    @TimeLimiter(name = BACKEND_A)
     @CircuitBreaker(name = BACKEND_A)
     @Bulkhead(name = BACKEND_A)
     @Retry(name = BACKEND_A)
@@ -86,7 +85,6 @@ public class BackendAService implements Service {
     }
 
     @Override
-    @TimeLimiter(name = BACKEND_A)
     @CircuitBreaker(name = BACKEND_A)
     @Bulkhead(name = BACKEND_A)
     @Retry(name = BACKEND_A)

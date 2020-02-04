@@ -32,7 +32,7 @@ resilience4j.circuitbreaker:
             minimumNumberOfCalls: 5
             permittedNumberOfCallsInHalfOpenState: 3
             automaticTransitionFromOpenToHalfOpenEnabled: true
-            waitDurationInOpenState: 2s
+            waitDurationInOpenState: 5s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordExceptions:
@@ -57,7 +57,7 @@ resilience4j.circuitbreaker:
             slidingWindowSize: 10
             minimumNumberOfCalls: 10
             permittedNumberOfCallsInHalfOpenState: 3
-            waitDurationInOpenState: 1s
+            waitDurationInOpenState: 5s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate

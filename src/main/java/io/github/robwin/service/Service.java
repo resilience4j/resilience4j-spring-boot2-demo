@@ -16,6 +16,8 @@ public interface Service {
 
     String ignoreException();
 
+    Flux<String> fluxSuccess();
+
     Flux<String> fluxFailure();
 
     Flux<String> fluxTimeout();
@@ -25,8 +27,6 @@ public interface Service {
     Mono<String> monoFailure();
 
     Mono<String> monoTimeout();
-
-    Flux<String> fluxSuccess();
 
     CompletableFuture<String> futureSuccess();
 
