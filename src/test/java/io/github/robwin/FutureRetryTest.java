@@ -16,43 +16,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 		classes = Application.class)
 @DirtiesContext
-public class ReactiveRetryTest {
+public class FutureRetryTest {
 
-    private static final String BACKEND_A = "backendA";
+	private static final String BACKEND_A = "backendA";
 	private static final String BACKEND_B = "backendB";
 
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-    @Test
-    public void backendAshouldRetryThreeTimes() {
-        // When
-        produceFailure(BACKEND_A);
+	@Test
+	public void backendAshouldRetryThreeTimes() {
+		// When
+		produceFailure(BACKEND_A);
 
-        checkMetrics("failed_with_retry", BACKEND_A, "1.0");
-    }
+		checkMetrics("failed_with_retry", BACKEND_A, "1.0");
+	}
 
-    @Test
-    public void backendBshouldRetryThreeTimes() {
-        // When
-        produceFailure(BACKEND_B);
+	@Test
+	public void backendBshouldRetryThreeTimes() {
+		// When
+		produceFailure(BACKEND_B);
 
-        checkMetrics("failed_with_retry", BACKEND_B, "1.0");
-    }
+		checkMetrics("failed_with_retry", BACKEND_B, "1.0");
+	}
 
-    @Test
-    public void backendAshouldSucceedWithoutRetry() {
-        produceSuccess(BACKEND_A);
+	@Test
+	public void backendAshouldSucceedWithoutRetry() {
+		produceSuccess(BACKEND_A);
 
-        checkMetrics("successful_without_retry", BACKEND_A, "1.0");
-    }
+		checkMetrics("successful_without_retry", BACKEND_A, "1.0");
+	}
 
-    @Test
-    public void backendBshouldSucceedWithoutRetry() {
-        produceSuccess(BACKEND_B);
+	@Test
+	public void backendBshouldSucceedWithoutRetry() {
+		produceSuccess(BACKEND_B);
 
-        checkMetrics("successful_without_retry", BACKEND_B, "1.0");
-    }
+		checkMetrics("successful_without_retry", BACKEND_B, "1.0");
+	}
 
 	private void checkMetrics(String kind, String backend, String count) {
 		ResponseEntity<String> metricsResponse = restTemplate.getForEntity("/actuator/prometheus", String.class);
@@ -62,12 +62,12 @@ public class ReactiveRetryTest {
 	}
 
 	private void produceFailure(String backend) {
-		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/monoFailure", String.class);
+		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/futureFailure", String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	private void produceSuccess(String backend) {
-		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/monoSuccess", String.class);
+		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/futureSuccess", String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 

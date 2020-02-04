@@ -1,9 +1,7 @@
-package io.github.robwin.connnector;
+package io.github.robwin.service;
 
 
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
 import io.github.robwin.exception.BusinessException;
 import io.vavr.control.Try;
 import org.springframework.http.HttpStatus;
@@ -14,23 +12,20 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
-import static io.github.resilience4j.bulkhead.annotation.Bulkhead.*;
+@Component(value = "backendBService")
+public class BackendBService implements Service {
 
-@RateLimiter(name = "backendB")
-@Retry(name = "backendB")
-@Component(value = "backendBConnector")
-public class BackendBConnector implements Connector {
+    private static final String BACKEND_B = "backendB";
 
     @Override
-    @Bulkhead(name = "backendB")
     public String failure() {
         throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
     }
 
     @Override
-    @Bulkhead(name = "backendB")
     public String success() {
         return "Hello World from backend B";
     }
@@ -52,31 +47,38 @@ public class BackendBConnector implements Connector {
     }
 
     @Override
-    @Bulkhead(name = "backendB")
+    public Flux<String> fluxTimeout() {
+        return Flux.just("Hello World from backend B")
+                .delayElements(Duration.ofSeconds(10));
+    }
+
+    @Override
     public Mono<String> monoSuccess() {
         return Mono.just("Hello World from backend B");
     }
 
     @Override
-    @Bulkhead(name = "backendB")
     public Mono<String> monoFailure() {
         return Mono.error(new IOException("BAM!"));
     }
 
     @Override
-    @Bulkhead(name = "backendB")
+    public Mono<String> monoTimeout() {
+        return Mono. just("Hello World from backend B")
+                .delayElement(Duration.ofSeconds(10));
+    }
+
+    @Override
     public Flux<String> fluxSuccess() {
         return Flux.just("Hello", "World");
     }
 
     @Override
-    @Bulkhead(name = "backendB", type = Type.THREADPOOL)
     public CompletableFuture<String> futureSuccess() {
         return CompletableFuture.completedFuture("Hello World from backend B");
     }
 
     @Override
-    @Bulkhead(name = "backendB", type = Type.THREADPOOL)
     public CompletableFuture<String> futureFailure() {
         CompletableFuture<String> future = new CompletableFuture<>();
         future.completeExceptionally(new IOException("BAM!"));
@@ -84,7 +86,28 @@ public class BackendBConnector implements Connector {
     }
 
     @Override
-    public String failureWithFallback() {
-        return Try.ofSupplier(this::failure).recover(ex -> "Recovered").get();
+    public CompletableFuture<String> futureTimeout() {
+        Try.ofCallable(this::timeout);
+        return CompletableFuture.completedFuture("Hello World from backend A");
     }
+
+    private String timeout(){
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    @Override
+    public String failureWithFallback() {
+        return Try.ofSupplier(this::failure).recover(this::fallback).get();
+    }
+
+    private String fallback(Throwable ex) {
+        return "Recovered: " + ex.toString();
+    }
+
+
 }

@@ -10,7 +10,7 @@ management.endpoint.health.show-details: always
 
 management.health.diskspace.enabled: false
 management.health.circuitbreakers.enabled: true
-management.health.ratelimiters.enabled: true
+management.health.ratelimiters.enabled: false
 
 info:
     name: ${spring.application.name}
@@ -27,21 +27,21 @@ management.metrics.distribution.percentiles-histogram.resilience4j.circuitbreake
 resilience4j.circuitbreaker:
     configs:
         default:
-            registerHealthIndicator: false
+            registerHealthIndicator: true
             slidingWindowSize: 10
             minimumNumberOfCalls: 5
             permittedNumberOfCallsInHalfOpenState: 3
             automaticTransitionFromOpenToHalfOpenEnabled: true
-            waitDurationInOpenState: 2s
+            waitDurationInOpenState: 5s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordExceptions:
                 - org.springframework.web.client.HttpServerErrorException
+                - java.util.concurrent.TimeoutException
                 - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
         shared:
-            registerHealthIndicator: true
             slidingWindowSize: 100
             permittedNumberOfCallsInHalfOpenState: 30
             waitDurationInOpenState: 1s
@@ -57,25 +57,26 @@ resilience4j.circuitbreaker:
             slidingWindowSize: 10
             minimumNumberOfCalls: 10
             permittedNumberOfCallsInHalfOpenState: 3
-            waitDurationInOpenState: 1s
+            waitDurationInOpenState: 5s
             failureRateThreshold: 50
             eventConsumerBufferSize: 10
             recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
 resilience4j.retry:
     configs:
         default:
-            maxRetryAttempts: 2
+            maxRetryAttempts: 3
             waitDuration: 100
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
+                - java.util.concurrent.TimeoutException
                 - java.io.IOException
             ignoreExceptions:
                 - io.github.robwin.exception.BusinessException
     instances:
         backendA:
-            maxRetryAttempts: 3
+            baseConfig: default
         backendB:
-            maxRetryAttempts: 3
+            baseConfig: default
 resilience4j.bulkhead:
     configs:
         default:
@@ -116,3 +117,13 @@ resilience4j.ratelimiter:
             limitForPeriod: 6
             limitRefreshPeriod: 500ms
             timeoutDuration: 3s
+resilience4j:
+    configs:
+        default:
+            cancelRunningFuture: false
+            timeoutDuration: 2s
+    instances:
+        backendA:
+            baseConfig: default
+        backendB:
+            baseConfig: default
