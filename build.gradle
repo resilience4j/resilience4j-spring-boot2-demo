@@ -19,7 +19,7 @@ sourceCompatibility = 1.8
 
 repositories {
 	//mavenLocal()
-	//jcenter()
+	jcenter()
 	mavenCentral()
 	//maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 
