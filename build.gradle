@@ -19,10 +19,9 @@ sourceCompatibility = 1.8
 
 repositories {
 	//mavenLocal()
-	
 	//jcenter()
 	mavenCentral()
-	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+	//maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 
 
 
@@ -32,7 +31,7 @@ configurations.all {
 }
 
 ext{
-	resilience4jVersion = '1.3.0-SNAPSHOT'
+	resilience4jVersion = '1.3.0'
 }
 
 dependencies {
