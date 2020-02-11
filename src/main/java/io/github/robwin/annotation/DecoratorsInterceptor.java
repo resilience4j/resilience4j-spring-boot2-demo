@@ -28,10 +28,11 @@ import java.util.Set;
 @Component
 public class DecoratorsInterceptor implements MethodInterceptor, PointcutAdvisor, Ordered {
 
-    private Pointcut pointcut;
-    private CircuitBreakerRegistry circuitBreakerRegistry;
+    private final Pointcut pointcut;
+    private final CircuitBreakerRegistry circuitBreakerRegistry;
     private final RetryRegistry retryRegistry;
     private final TimeLimiterRegistry timeLimiterRegistry;
+    private final Set<Class<? extends Annotation>> annotationSet;
 
     public DecoratorsInterceptor(CircuitBreakerRegistry circuitBreakerRegistry,
                                  RetryRegistry retryRegistry,
@@ -40,6 +41,12 @@ public class DecoratorsInterceptor implements MethodInterceptor, PointcutAdvisor
         this.retryRegistry = retryRegistry;
         this.timeLimiterRegistry = timeLimiterRegistry;
         this.pointcut = buildPointcut();
+
+        this.annotationSet = new HashSet<>();
+        this.annotationSet.add(CircuitBreaker.class);
+        this.annotationSet.add(Retry.class);
+        this.annotationSet.add(Bulkhead.class);
+        this.annotationSet.add(TimeLimiter.class);
     }
 
     @Override
@@ -48,21 +55,7 @@ public class DecoratorsInterceptor implements MethodInterceptor, PointcutAdvisor
         Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
         Method method = ClassUtils.getMostSpecificMethod(invocation.getMethod(), targetClass);
 
-        Set<Class<? extends Annotation>> annotationSet = new HashSet<>();
-        annotationSet.add(CircuitBreaker.class);
-        annotationSet.add(Retry.class);
-        annotationSet.add(Bulkhead.class);
-        annotationSet.add(TimeLimiter.class);
-
         Set<Annotation> allMergedAnnotations = AnnotatedElementUtils.getAllMergedAnnotations(method, annotationSet);
-
-        Decorators decoratorsAnnotation = AnnotatedElementUtils.findMergedAnnotation(method, Decorators.class);
-        if (decoratorsAnnotation == null) {
-            decoratorsAnnotation = AnnotatedElementUtils.findMergedAnnotation(method.getDeclaringClass(), Decorators.class);
-        }
-
-        String name = decoratorsAnnotation.name();
-        Class<?> returnType = method.getReturnType();
 
         io.github.resilience4j.decorators.Decorators.DecorateCheckedSupplier decorateCheckedSupplier =
                 io.github.resilience4j.decorators.Decorators.ofCheckedSupplier(invocation::proceed);
