@@ -7,6 +7,7 @@ import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import io.github.robwin.annotation.ComposedDecorator;
 import io.github.robwin.exception.BusinessException;
 import io.vavr.control.Try;
 import org.springframework.http.HttpStatus;
@@ -32,9 +33,10 @@ public class BackendAService implements Service {
     private static final String BACKEND_A = "backendA";
 
     @Override
-    @CircuitBreaker(name = BACKEND_A)
-    @Bulkhead(name = BACKEND_A)
-    @Retry(name = BACKEND_A)
+    //@CircuitBreaker(name = BACKEND_A)
+    //@Bulkhead(name = BACKEND_A)
+    //@Retry(name = BACKEND_A)
+    @ComposedDecorator(name = BACKEND_A)
     public String failure() {
         throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "This is a remote exception");
     }
