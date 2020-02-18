@@ -1,5 +1,5 @@
 FROM gradle:5.4.0-jdk8-alpine
-ADD . /code
+ADD --chown=gradle . /code
 WORKDIR /code
-RUN gradle clean package -DskipTests=true
-CMD gradle spring-boot:run
+RUN gradle clean build -x test
+CMD gradle bootRun
