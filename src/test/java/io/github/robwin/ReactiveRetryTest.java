@@ -12,54 +12,41 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-		classes = Application.class)
-@DirtiesContext
-public class ReactiveRetryTest {
-
-    private static final String BACKEND_A = "backendA";
-	private static final String BACKEND_B = "backendB";
-
-	@Autowired
-	private TestRestTemplate restTemplate;
+public class ReactiveRetryTest extends AbstractRetryTest {
 
     @Test
     public void backendAshouldRetryThreeTimes() {
         // When
+        float currentCount = getCurrentCount(FAILED_WITH_RETRY, BACKEND_A);
         produceFailure(BACKEND_A);
 
-        checkMetrics("failed_with_retry", BACKEND_A, "1.0");
+        checkMetrics(FAILED_WITH_RETRY, BACKEND_A, currentCount + 1);
     }
 
     @Test
     public void backendBshouldRetryThreeTimes() {
         // When
+        float currentCount = getCurrentCount(FAILED_WITH_RETRY, BACKEND_B);
         produceFailure(BACKEND_B);
 
-        checkMetrics("failed_with_retry", BACKEND_B, "1.0");
+        checkMetrics(FAILED_WITH_RETRY, BACKEND_B, currentCount + 1);
     }
 
     @Test
     public void backendAshouldSucceedWithoutRetry() {
+        float currentCount = getCurrentCount(SUCCESS_WITHOUT_RETRY, BACKEND_A);
         produceSuccess(BACKEND_A);
 
-        checkMetrics("successful_without_retry", BACKEND_A, "1.0");
+        checkMetrics(SUCCESS_WITHOUT_RETRY, BACKEND_A, currentCount + 1);
     }
 
     @Test
     public void backendBshouldSucceedWithoutRetry() {
+        float currentCount = getCurrentCount(SUCCESS_WITHOUT_RETRY, BACKEND_B);
         produceSuccess(BACKEND_B);
 
-        checkMetrics("successful_without_retry", BACKEND_B, "1.0");
+        checkMetrics(SUCCESS_WITHOUT_RETRY, BACKEND_B, currentCount + 1);
     }
-
-	private void checkMetrics(String kind, String backend, String count) {
-		ResponseEntity<String> metricsResponse = restTemplate.getForEntity("/actuator/prometheus", String.class);
-		assertThat(metricsResponse.getBody()).isNotNull();
-		String response = metricsResponse.getBody();
-		assertThat(response).contains("resilience4j_retry_calls_total{application=\"resilience4j-demo\",kind=\"" + kind + "\",name=\"" +  backend + "\",} " + count);
-	}
 
 	private void produceFailure(String backend) {
 		ResponseEntity<String> response = restTemplate.getForEntity("/" + backend + "/monoFailure", String.class);
