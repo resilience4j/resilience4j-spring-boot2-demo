@@ -1,34 +1,15 @@
 package io.github.robwin;
 
-import io.vavr.collection.Stream;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-		classes = Application.class)
-@DirtiesContext
+import org.junit.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import io.vavr.collection.Stream;
+
 public class CircuitBreakerTest extends AbstractCircuitBreakerTest {
-
-	@Autowired
-	private TestRestTemplate restTemplate;
-
-	@Before
-	public void setup(){
-		transitionToClosedState(BACKEND_A);
-		transitionToClosedState(BACKEND_B);
-	}
 
 	@Test
 	public void shouldOpenBackendACircuitBreaker() {
@@ -42,7 +23,7 @@ public class CircuitBreakerTest extends AbstractCircuitBreakerTest {
 	@Test
 	public void shouldCloseBackendACircuitBreaker() {
 		transitionToOpenState(BACKEND_A);
-		registry.circuitBreaker(BACKEND_A).transitionToHalfOpenState();
+		circuitBreakerRegistry.circuitBreaker(BACKEND_A).transitionToHalfOpenState();
 
 		// When
 		Stream.rangeClosed(1,3).forEach((count) -> produceSuccess(BACKEND_A));
@@ -63,7 +44,7 @@ public class CircuitBreakerTest extends AbstractCircuitBreakerTest {
 	@Test
 	public void shouldCloseBackendBCircuitBreaker() {
 		transitionToOpenState(BACKEND_B);
-		registry.circuitBreaker(BACKEND_B).transitionToHalfOpenState();
+		circuitBreakerRegistry.circuitBreaker(BACKEND_B).transitionToHalfOpenState();
 
 		// When
 		Stream.rangeClosed(1,3).forEach((count) -> produceSuccess(BACKEND_B));
