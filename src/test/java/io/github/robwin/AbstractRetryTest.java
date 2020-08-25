@@ -33,7 +33,7 @@ public abstract class AbstractRetryTest extends AbstractIntegrationTest {
         ResponseEntity<String> metricsResponse = restTemplate.getForEntity("/actuator/prometheus", String.class);
         assertThat(metricsResponse.getBody()).isNotNull();
         String response = metricsResponse.getBody();
-        assertThat(response).contains(getMetricName(kind, backend) + String.format("%.1f", count));
+        assertThat(response).contains(getMetricName(kind, backend) + count);
     }
 
     protected static String getMetricName(String kind, String backend) {
