@@ -29,7 +29,7 @@ configurations.all {
 }
 
 ext{
-	resilience4jVersion = '1.4.0'
+	resilience4jVersion = '1.6.0'
 }
 
 dependencies {
