@@ -478,7 +478,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "resilience4j_circuitbreaker_failure_rate{instance=\"$instance\",name=\"$circuitbreaker_name\"}",
+          "expr": "resilience4j_circuitbreaker_failure_rate{application=\"$application\",name=\"$circuitbreaker_name\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
