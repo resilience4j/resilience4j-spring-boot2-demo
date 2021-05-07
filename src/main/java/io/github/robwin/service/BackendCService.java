@@ -27,6 +27,8 @@ import static io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
 public class BackendCService implements Service {
 
     private static final String BACKEND_C = "backendC";
+    private static final String RECOVERED = "Recovered: ";
+    private static final String HELLO_WORLD = "Hello World from backend C";
 
     @Override
     @CircuitBreaker(name = BACKEND_C)
@@ -48,7 +50,7 @@ public class BackendCService implements Service {
     @Bulkhead(name = BACKEND_C)
     @Retry(name = BACKEND_C)
     public String success() {
-        return "Hello World from backend A";
+        return HELLO_WORLD;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class BackendCService implements Service {
     @CircuitBreaker(name = BACKEND_C, fallbackMethod = "fluxFallback")
     public Flux<String> fluxTimeout() {
         return Flux.
-                just("Hello World from backend A")
+                just(HELLO_WORLD)
                 .delayElements(Duration.ofSeconds(10));
     }
 
@@ -81,7 +83,7 @@ public class BackendCService implements Service {
     @Bulkhead(name = BACKEND_C)
     @Retry(name = BACKEND_C)
     public Mono<String> monoSuccess() {
-        return Mono.just("Hello World from backend A");
+        return Mono.just(HELLO_WORLD);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class BackendCService implements Service {
     @Bulkhead(name = BACKEND_C)
     @CircuitBreaker(name = BACKEND_C, fallbackMethod = "monoFallback")
     public Mono<String> monoTimeout() {
-        return Mono.just("Hello World from backend A")
+        return Mono.just(HELLO_WORLD)
                 .delayElement(Duration.ofSeconds(10));
     }
 
@@ -121,7 +123,7 @@ public class BackendCService implements Service {
     @CircuitBreaker(name = BACKEND_C)
     @Retry(name = BACKEND_C)
     public CompletableFuture<String> futureSuccess() {
-        return CompletableFuture.completedFuture("Hello World from backend A");
+        return CompletableFuture.completedFuture(HELLO_WORLD);
     }
 
     @Override
@@ -141,7 +143,7 @@ public class BackendCService implements Service {
     @CircuitBreaker(name = BACKEND_C, fallbackMethod = "futureFallback")
     public CompletableFuture<String> futureTimeout() {
         Try.run(() -> Thread.sleep(5000));
-        return CompletableFuture.completedFuture("Hello World from backend A");
+        return CompletableFuture.completedFuture(HELLO_WORLD);
     }
 
     private String fallback(HttpServerErrorException ex) {
@@ -149,7 +151,7 @@ public class BackendCService implements Service {
     }
 
     private String fallback(Exception ex) {
-        return "Recovered: " + ex.toString();
+        return RECOVERED + ex.toString();
     }
 
     private CompletableFuture<String> futureFallback(TimeoutException ex) {
@@ -165,10 +167,10 @@ public class BackendCService implements Service {
     }
 
     private Mono<String> monoFallback(Exception ex) {
-        return Mono.just("Recovered: " + ex.toString());
+        return Mono.just(RECOVERED + ex.toString());
     }
 
     private Flux<String> fluxFallback(Exception ex) {
-        return Flux.just("Recovered: " + ex.toString());
+        return Flux.just(RECOVERED + ex.toString());
     }
 }

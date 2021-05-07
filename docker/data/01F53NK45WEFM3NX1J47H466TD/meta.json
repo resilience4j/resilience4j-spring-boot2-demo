@@ -1,0 +1,17 @@
+{
+	"ulid": "01F53NK45WEFM3NX1J47H466TD",
+	"minTime": 1620388800000,
+	"maxTime": 1620396000000,
+	"stats": {
+		"numSamples": 1196,
+		"numSeries": 1196,
+		"numChunks": 1196
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01F53NK45WEFM3NX1J47H466TD"
+		]
+	},
+	"version": 1
+}

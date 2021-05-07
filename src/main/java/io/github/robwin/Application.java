@@ -1,6 +1,5 @@
 package io.github.robwin;
 
-
 import java.net.URI;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
@@ -24,58 +23,65 @@ import static org.springframework.web.reactive.function.server.ServerResponse.pe
 @SpringBootApplication
 public class Application {
 
-    private static Logger LOG = LoggerFactory.getLogger(Application.class);
+  private static Logger LOG = LoggerFactory.getLogger(Application.class);
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
 
-    @Bean
-    RouterFunction<ServerResponse> redirectRoot() {
-        return route(GET("/"),
-                req -> permanentRedirect(URI.create("/actuator")).build());
-    }
+  @Bean
+  RouterFunction<ServerResponse> redirectRoot() {
+    return route(GET("/"), req -> permanentRedirect(URI.create("/actuator")).build());
+  }
 
-    @Bean
-    public RegistryEventConsumer<CircuitBreaker> myRegistryEventConsumer() {
+  @Bean
+  public RegistryEventConsumer<CircuitBreaker> myRegistryEventConsumer() {
 
-        return new RegistryEventConsumer<CircuitBreaker>() {
-            @Override
-            public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
-                entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> LOG.info(event.toString()));
-            }
+    return new RegistryEventConsumer<CircuitBreaker>() {
+      @Override
+      public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
+        entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> LOG.info(event.toString()));
+      }
 
-            @Override
-            public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
+      @Override
+      public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
 
-            }
+        // This is intentional empty
 
-            @Override
-            public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
+      }
 
-            }
-        };
-    }
+      @Override
+      public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
 
-@Bean
-public RegistryEventConsumer<Retry> myRetryRegistryEventConsumer() {
+        // This is intentional empty
+
+      }
+    };
+  }
+
+  @Bean
+  public RegistryEventConsumer<Retry> myRetryRegistryEventConsumer() {
 
     return new RegistryEventConsumer<Retry>() {
-        @Override
-        public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
-            entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> LOG.info(event.toString()));
-        }
+      @Override
+      public void onEntryAddedEvent(EntryAddedEvent<Retry> entryAddedEvent) {
+        entryAddedEvent.getAddedEntry().getEventPublisher().onEvent(event -> LOG.info(event.toString()));
+      }
 
-        @Override
-        public void onEntryRemovedEvent(EntryRemovedEvent<Retry> entryRemoveEvent) {
+      @Override
+      public void onEntryRemovedEvent(EntryRemovedEvent<Retry> entryRemoveEvent) {
 
-        }
+        // This is intentional empty
 
-        @Override
-        public void onEntryReplacedEvent(EntryReplacedEvent<Retry> entryReplacedEvent) {
+      }
 
-        }
+      @Override
+      public void onEntryReplacedEvent(EntryReplacedEvent<Retry> entryReplacedEvent) {
+
+        // This is intentional empty
+
+      }
     };
-}
+  }
 
 }

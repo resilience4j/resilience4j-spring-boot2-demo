@@ -2,7 +2,7 @@ package io.github.robwin;
 
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.vavr.collection.Stream;
 

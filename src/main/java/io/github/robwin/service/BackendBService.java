@@ -19,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class BackendBService implements Service {
 
     private static final String BACKEND_B = "backendB";
+    private static final String HELLO_WORLD = "Hello World from backend B";
 
     @Override
     public String failure() {
@@ -27,7 +28,7 @@ public class BackendBService implements Service {
 
     @Override
     public String success() {
-        return "Hello World from backend B";
+        return HELLO_WORLD;
     }
 
     @Override
@@ -48,13 +49,13 @@ public class BackendBService implements Service {
 
     @Override
     public Flux<String> fluxTimeout() {
-        return Flux.just("Hello World from backend B")
+        return Flux.just(HELLO_WORLD)
                 .delayElements(Duration.ofSeconds(10));
     }
 
     @Override
     public Mono<String> monoSuccess() {
-        return Mono.just("Hello World from backend B");
+        return Mono.just(HELLO_WORLD);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class BackendBService implements Service {
 
     @Override
     public Mono<String> monoTimeout() {
-        return Mono.just("Hello World from backend B")
+        return Mono.just(HELLO_WORLD)
                 .delayElement(Duration.ofSeconds(10));
     }
 
@@ -75,7 +76,7 @@ public class BackendBService implements Service {
 
     @Override
     public CompletableFuture<String> futureSuccess() {
-        return CompletableFuture.completedFuture("Hello World from backend B");
+        return CompletableFuture.completedFuture(HELLO_WORLD);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class BackendBService implements Service {
     @Override
     public CompletableFuture<String> futureTimeout() {
         Try.run(() -> Thread.sleep(5000));
-        return CompletableFuture.completedFuture("Hello World from backend A");
+        return CompletableFuture.completedFuture(HELLO_WORLD);
     }
 
     @Override

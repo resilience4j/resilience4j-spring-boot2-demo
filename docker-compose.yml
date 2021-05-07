@@ -1,14 +1,24 @@
-version: '3'
+version: "3"
 services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
-    network_mode: "host"
+    # network_mode: "host"
+    networks:
+      - net
     volumes:
       - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
   grafana:
     image: grafana/grafana
     container_name: grafana
-    network_mode: "host"
+    # network_mode: "host"
+    networks:
+      - net
     env_file:
       - ./docker/grafana.env
+    ports:
+      - "3000:3000"
+networks:
+  net:

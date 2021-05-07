@@ -37,13 +37,14 @@ import static java.util.Arrays.asList;
 public class BackendBController {
 
     private static final String BACKEND_B = "backendB";
+    private static final String RECOVERED = "Recovered: ";
     private final Service businessBService;
     private final CircuitBreaker circuitBreaker;
     private final Bulkhead bulkhead;
     private final ThreadPoolBulkhead threadPoolBulkhead;
     private final Retry retry;
-    private final RateLimiter rateLimiter;
     private final TimeLimiter timeLimiter;
+    private final RateLimiter rateLimiter;
     private final ScheduledExecutorService scheduledExecutorService;
 
     public BackendBController(
@@ -208,14 +209,14 @@ public class BackendBController {
     }
 
     private String fallback(Throwable ex) {
-        return "Recovered: " + ex.toString();
+        return RECOVERED + ex.toString();
     }
 
     private Mono<String> monoFallback(Throwable ex) {
-        return Mono.just("Recovered: " + ex.toString());
+        return Mono.just(RECOVERED + ex.toString());
     }
 
     private Flux<String> fluxFallback(Throwable ex) {
-        return Flux.just("Recovered: " + ex.toString());
+        return Flux.just(RECOVERED + ex.toString());
     }
 }
