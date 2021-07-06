@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.4.4'
+		springBootVersion = '2.5.2'
 	}
 	repositories {
 		mavenCentral()
@@ -18,10 +18,8 @@ apply plugin: 'io.spring.dependency-management'
 sourceCompatibility = 1.8
 
 repositories {
-	//mavenLocal()
-	//jcenter()
 	mavenCentral()
-	//maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 
 }
 configurations.all {
@@ -29,7 +27,7 @@ configurations.all {
 }
 
 ext{
-	resilience4jVersion = '1.7.0'
+	resilience4jVersion = '1.7.1'
 }
 
 dependencies {

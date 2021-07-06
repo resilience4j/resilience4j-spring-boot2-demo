@@ -3,7 +3,7 @@ spring:
     jackson.serialization.indent_output: true
 
 server:
-    port: 9080
+    port: 9081
 
 management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
@@ -64,7 +64,7 @@ resilience4j.circuitbreaker:
 resilience4j.retry:
     configs:
         default:
-            maxRetryAttempts: 3
+            maxAttempts: 3
             waitDuration: 100
             retryExceptions:
                 - org.springframework.web.client.HttpServerErrorException
