@@ -2,9 +2,7 @@ package io.github.robwin;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
