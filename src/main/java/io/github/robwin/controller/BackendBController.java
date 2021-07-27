@@ -96,19 +96,19 @@ public class BackendBController {
         return execute(businessBService.monoFailure());
     }
 
+    @GetMapping("monoTimeout")
+    public Mono<String> monoTimeout(){
+        return executeWithFallback(businessBService.monoTimeout(), this::monoFallback);
+    }
+
     @GetMapping("fluxSuccess")
     public Flux<String> fluxSuccess(){
-        return execute(businessBService.fluxFailure());
+        return execute(businessBService.fluxSuccess());
     }
 
     @GetMapping("fluxFailure")
     public Flux<String> fluxFailure(){
         return execute(businessBService.fluxFailure());
-    }
-
-    @GetMapping("monoTimeout")
-    public Mono<String> monoTimeout(){
-        return executeWithFallback(businessBService.monoTimeout(), this::monoFallback);
     }
 
     @GetMapping("fluxTimeout")

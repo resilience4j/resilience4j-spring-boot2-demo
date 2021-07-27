@@ -50,6 +50,11 @@ public class BackendCController {
         return businessCService.monoFailure();
     }
 
+    @GetMapping("monoTimeout")
+    public Mono<String> monoTimeout(){
+        return businessCService.monoTimeout();
+    }
+
     @GetMapping("fluxSuccess")
     public Flux<String> fluxSuccess(){
         return businessCService.fluxSuccess();
@@ -58,11 +63,6 @@ public class BackendCController {
     @GetMapping("fluxFailure")
     public Flux<String> fluxFailure(){
         return businessCService.fluxFailure();
-    }
-
-    @GetMapping("monoTimeout")
-    public Mono<String> monoTimeout(){
-        return businessCService.monoTimeout();
     }
 
     @GetMapping("fluxTimeout")

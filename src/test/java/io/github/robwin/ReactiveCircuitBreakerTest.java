@@ -2,9 +2,8 @@ package io.github.robwin;
 
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State;
 
-import org.junit.Test;
-
 import io.vavr.collection.Stream;
+import org.junit.jupiter.api.Test;
 
 public class ReactiveCircuitBreakerTest extends AbstractCircuitBreakerTest {
 
