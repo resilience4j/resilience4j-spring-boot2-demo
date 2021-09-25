@@ -31,18 +31,18 @@ ext{
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-webflux')
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-aop')
+	implementation('org.springframework.boot:spring-boot-starter-webflux')
+	implementation('org.springframework.boot:spring-boot-starter-actuator')
+	implementation('org.springframework.boot:spring-boot-starter-aop')
 
-	compile("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
-	compile("io.github.resilience4j:resilience4j-all:${resilience4jVersion}") // Optional, only required when you want to use the Decorators class
-	compile("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
-	compile("io.micrometer:micrometer-registry-prometheus")
+	implementation("io.github.resilience4j:resilience4j-spring-boot2:${resilience4jVersion}")
+	implementation("io.github.resilience4j:resilience4j-all:${resilience4jVersion}") // Optional, only required when you want to use the Decorators class
+	implementation("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
+	implementation("io.micrometer:micrometer-registry-prometheus")
 
-	compile 'de.codecentric:chaos-monkey-spring-boot:2.1.1'
-	
-	compile("io.vavr:vavr-jackson:0.10.0")
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('io.projectreactor:reactor-test')
+	implementation("de.codecentric:chaos-monkey-spring-boot:2.1.1")
+
+	implementation("io.vavr:vavr-jackson:0.10.0")
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation('io.projectreactor:reactor-test')
 }
