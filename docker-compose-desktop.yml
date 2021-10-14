@@ -24,7 +24,7 @@ services:
   # build and start spring application inside a separate container using the same network as prometheus
     build: .
     ports:
-      - "9080:9080"
+      - "9081:9081"
     networks:
       - net
 networks:

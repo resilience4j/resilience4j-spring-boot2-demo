@@ -15,7 +15,7 @@ The [BackendBController](https://github.com/resilience4j/resilience4j-spring-boo
 ## Getting Started
 
 Just run the Application.java in your IDE.  
-Application is running on http://localhost:9080.
+Application is running on http://localhost:9081.
 
 ## Monitoring with Prometheus and Grafana (OPTIONAL)
 

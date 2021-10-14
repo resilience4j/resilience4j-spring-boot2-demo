@@ -28,4 +28,4 @@ scrape_configs:
 
     static_configs:
       # Use the service name (see docker-compose-desktop.yml) instead of localhost
-      - targets: ['app:9080']
+      - targets: ['app:9081']

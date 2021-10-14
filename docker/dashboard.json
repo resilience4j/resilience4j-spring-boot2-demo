@@ -1224,9 +1224,9 @@
       {
         "allValue": null,
         "current": {
-          "text": "localhost:9080",
+          "text": "localhost:9081",
           "value": [
-            "localhost:9080"
+            "localhost:9081"
           ]
         },
         "datasource": "Prometheus",
@@ -1244,8 +1244,8 @@
           },
           {
             "selected": true,
-            "text": "localhost:9080",
-            "value": "localhost:9080"
+            "text": "localhost:9081",
+            "value": "localhost:9081"
           }
         ],
         "query": "label_values(resilience4j_circuitbreaker_state, instance)",
