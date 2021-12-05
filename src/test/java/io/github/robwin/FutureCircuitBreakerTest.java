@@ -3,7 +3,7 @@ package io.github.robwin;
 import static io.github.resilience4j.circuitbreaker.CircuitBreaker.State;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
