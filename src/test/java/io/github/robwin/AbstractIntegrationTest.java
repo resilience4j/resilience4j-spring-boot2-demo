@@ -3,6 +3,7 @@ package io.github.robwin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -14,6 +15,7 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureWebTestClient
+@AutoConfigureMetrics
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = Application.class)
 public abstract class AbstractIntegrationTest {
