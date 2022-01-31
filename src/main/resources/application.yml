@@ -3,7 +3,7 @@ spring:
     jackson.serialization.indent_output: true
 
 server:
-    port: 9081
+    port: 9080
 
 management.endpoints.web.exposure.include: '*'
 management.endpoint.health.show-details: always
@@ -117,7 +117,7 @@ resilience4j.ratelimiter:
             limitForPeriod: 6
             limitRefreshPeriod: 500ms
             timeoutDuration: 3s
-            
+
 resilience4j.timelimiter:
     configs:
         default:
