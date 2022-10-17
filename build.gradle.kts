@@ -41,7 +41,7 @@ dependencies {
 	implementation("io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}")
 	implementation("io.micrometer:micrometer-registry-prometheus")
 
-	implementation("de.codecentric:chaos-monkey-spring-boot:2.1.1")
+	implementation("de.codecentric:chaos-monkey-spring-boot:2.6.1")
 	
 	implementation("io.vavr:vavr-jackson:0.10.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
