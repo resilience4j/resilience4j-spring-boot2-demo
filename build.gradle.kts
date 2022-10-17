@@ -43,7 +43,7 @@ dependencies {
 
 	implementation("de.codecentric:chaos-monkey-spring-boot:2.1.1")
 	
-	implementation("io.vavr:vavr-jackson:0.10.0")
+	implementation("io.vavr:vavr-jackson:0.10.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
 }
