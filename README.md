@@ -1,6 +1,7 @@
 # Spring Boot 2 demo of Resilience4j
 
-[![Build Status](https://travis-ci.org/resilience4j/resilience4j-spring-boot2-demo.svg?branch=master)](https://travis-ci.org/resilience4j/resilience4j-spring-boot2-demo)
+![Gradle Wrapper Status](https://github.com/resilience4j/resilience4j-spring-boot2-demo/actions/workflows/gradle-wrapper-validation.yml/badge.svg)
+![Build Status](https://github.com/resilience4j/resilience4j-spring-boot2-demo/actions/workflows/gradle-build.yml/badge.svg)
 
 This demo shows how to use the fault tolerance library [Resilience4j](https://github.com/resilience4j/resilience4j) in a Spring Boot 2 application.
 
@@ -14,7 +15,10 @@ The [BackendBController](https://github.com/resilience4j/resilience4j-spring-boo
 
 ## Getting Started
 
-Just run the Application.java in your IDE.  
+Just run the Application.java in your IDE.
+
+or `./gradlew bootrun`
+
 Application is running on http://localhost:9080.
 
 ## Monitoring with Prometheus and Grafana (OPTIONAL)
