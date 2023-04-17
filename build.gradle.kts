@@ -49,7 +49,7 @@ dependencies {
 	implementation("io.github.resilience4j:resilience4j-reactor")
 	implementation("io.micrometer:micrometer-registry-prometheus")
 
-	implementation("de.codecentric:chaos-monkey-spring-boot:2.7.0")
+	implementation("de.codecentric:chaos-monkey-spring-boot:3.0.1")
 	
 	implementation("io.vavr:vavr-jackson:0.10.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
